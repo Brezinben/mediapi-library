@@ -1,9 +1,9 @@
-package org.stcharles.jakartatp.api;
+package org.stcharles.jakartatp.api.Shape;
 
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
-import org.stcharles.jakartatp.controllers.ShapeController;
+import org.stcharles.jakartatp.controllers.Shape.ShapeController;
 import org.stcharles.jakartatp.model.Shape;
 
 import java.util.List;

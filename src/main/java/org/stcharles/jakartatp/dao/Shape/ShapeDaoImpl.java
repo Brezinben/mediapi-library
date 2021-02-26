@@ -1,4 +1,4 @@
-package org.stcharles.jakartatp.dao;
+package org.stcharles.jakartatp.dao.Shape;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
@@ -19,8 +19,7 @@ public class ShapeDaoImpl implements ShapeDao {
 
     @Override
     public List<Shape> getAll() {
-        return em
-                .createQuery("select s from Shape s", Shape.class)
+        return em.createQuery("select s from Shape s", Shape.class)
                 .getResultList();
     }
 

@@ -1,4 +1,4 @@
-package org.stcharles.jakartatp.api;
+package org.stcharles.jakartatp.api.Shape;
 
 public class ShapeInput {
     public String name;

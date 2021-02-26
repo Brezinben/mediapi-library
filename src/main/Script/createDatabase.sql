@@ -1,97 +1,97 @@
-CREATE EXTENSION citext;
-CREATE TYPE "state" AS ENUM ('Neuf', 'Convenable', 'Abîmer','Inutilisable');
-CREATE TYPE "loanState" AS ENUM ('Neuf', 'Convenable', 'Abîmer','Inutilisable');
-CREATE TYPE "itemType" AS ENUM ('Vinyle', 'CD', 'Cassette');
+--CREATE  EXTENSION citext;
+CREATE TYPE "item_state" AS ENUM ('NEUF','CONVENABLE','ABIMER','INUTILISABLE');
+CREATE TYPE "loan_state" AS ENUM ('EN_COURS','RENDU','EN_RETARD');
+CREATE TYPE "item_type" AS ENUM ('CD','VINYLE','CASSETTE');
 
-create table users
+CREATE TABLE users
 (
-    id         serial       not null
-        constraint users_pk
-            primary key,
-    first_name varchar(255) not null,
-    last_name  varchar(255) not null,
-    email      varchar(255) not null
+    id         SERIAL       NOT NULL
+        CONSTRAINT users_pk
+            PRIMARY KEY,
+    first_name VARCHAR(255) NOT NULL,
+    last_name  VARCHAR(255) NOT NULL,
+    email      VARCHAR(255) NOT NULL
 );
 
-alter table users
-    owner to postgres;
+ALTER TABLE users
+    OWNER TO postgres;
 
-create unique index users_id_uindex
-    on users (id);
+CREATE UNIQUE INDEX users_id_uindex
+    ON users (id);
 
-create unique index users_email_uindex
-    on users (email);
+CREATE UNIQUE INDEX users_email_uindex
+    ON users (email);
 
-create table groups
+CREATE TABLE groups
 (
-    id         serial       not null
-        constraint groups_pk
-            primary key,
-    name       varchar(255) not null,
-    created_at date         not null
+    id         SERIAL       NOT NULL
+        CONSTRAINT groups_pk
+            PRIMARY KEY,
+    name       VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP    NOT NULL
 );
 
-alter table groups
-    owner to postgres;
+ALTER TABLE groups
+    OWNER TO postgres;
 
-create unique index groups_id_uindex
-    on groups (id);
+CREATE UNIQUE INDEX groups_id_uindex
+    ON groups (id);
 
-create table albums
+CREATE TABLE albums
 (
-    id       serial not null
-        constraint albums_pk
-            primary key,
-    title    citext not null,
-    release  date   not null,
-    group_id integer
-        constraint group_id
-            references groups
+    id       SERIAL    NOT NULL
+        CONSTRAINT albums_pk
+            PRIMARY KEY,
+    title    citext    NOT NULL,
+    release  TIMESTAMP NOT NULL,
+    group_id INTEGER
+        CONSTRAINT group_id
+            REFERENCES groups
 );
 
-alter table albums
-    owner to postgres;
+ALTER TABLE albums
+    OWNER TO postgres;
 
-create unique index albums_id_uindex
-    on albums (id);
+CREATE UNIQUE INDEX albums_id_uindex
+    ON albums (id);
 
-create table items
+CREATE TABLE items
 (
-    id       serial   not null
-        constraint items_pk
-            primary key,
-    state    state    not null,
-    type     itemtype not null,
-    album_id integer
-        constraint album_id_fk
-            references albums
+    id       SERIAL     NOT NULL
+        CONSTRAINT items_pk
+            PRIMARY KEY,
+    state    item_state NOT NULL,
+    type     item_type  NOT NULL,
+    album_id INTEGER
+        CONSTRAINT album_id_fk
+            REFERENCES albums
 );
 
-alter table items
-    owner to postgres;
+ALTER TABLE items
+    OWNER TO postgres;
 
-create unique index items_id_uindex
-    on items (id);
+CREATE UNIQUE INDEX items_id_uindex
+    ON items (id);
 
-create table loans
+CREATE TABLE loans
 (
-    id         serial    not null
-        constraint loans_pk
-            primary key,
-    date_start date      not null,
-    date_end   date      not null,
-    status     loanstate not null,
-    user_id    integer
-        constraint user_id_fk
-            references users,
-    items_id   integer
-        constraint item_id_fk
-            references items
+    id              SERIAL     NOT NULL
+        CONSTRAINT loans_pk
+            PRIMARY KEY,
+    TIMESTAMP_start TIMESTAMP  NOT NULL,
+    TIMESTAMP_end   TIMESTAMP  NOT NULL,
+    status          loan_state NOT NULL,
+    user_id         INTEGER
+        CONSTRAINT user_id_fk
+            REFERENCES users,
+    items_id        INTEGER
+        CONSTRAINT item_id_fk
+            REFERENCES items
 );
 
-alter table loans
-    owner to postgres;
+ALTER TABLE loans
+    OWNER TO postgres;
 
-create unique index loans_id_uindex
-    on loans (id);
+CREATE UNIQUE INDEX loans_id_uindex
+    ON loans (id);
 

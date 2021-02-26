@@ -18,7 +18,8 @@ public class Shape {
         this.sides = sides;
     }
 
-    protected Shape() {}
+    protected Shape() {
+    }
 
     public Integer getId() {
         return id;

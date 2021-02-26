@@ -1,9 +1,9 @@
-package org.stcharles.jakartatp.controllers;
+package org.stcharles.jakartatp.controllers.Shape;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
-import org.stcharles.jakartatp.dao.ShapeDao;
+import org.stcharles.jakartatp.dao.Shape.ShapeDao;
 import org.stcharles.jakartatp.model.Shape;
 
 import java.util.List;

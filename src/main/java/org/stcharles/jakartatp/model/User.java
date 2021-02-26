@@ -2,7 +2,6 @@ package org.stcharles.jakartatp.model;
 
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -21,16 +20,36 @@ public class User {
     @Column(name = "email")
     private String email;
 
+    @OneToMany
+    private List<Loan> loans;
 
-    @OneToMany(mappedBy = "loans")
-    private  List<Loan> loans;
-
-
-    public User(String firstName, String lastName) {
-
+    public User(String firstName, String lastName, String email) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
     }
 
     protected User() {
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public List<Loan> getLoans() {
+        return loans;
     }
 
 
