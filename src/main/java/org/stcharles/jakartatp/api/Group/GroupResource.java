@@ -4,6 +4,7 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
 import org.stcharles.jakartatp.api.Album.AlbumOutput;
+import org.stcharles.jakartatp.api.Item.ItemOutput;
 import org.stcharles.jakartatp.controllers.Group.GroupController;
 import org.stcharles.jakartatp.model.Group;
 import org.stcharles.jakartatp.qualifier.Prod;
@@ -41,6 +42,20 @@ public class GroupResource {
     @Produces("application/json")
     public AlbumOutput getOneAlbums(@PathParam("groupId") int groupId, @PathParam("albumId") int albumId) {
         return groupController.getOneAlbum(groupId, albumId);
+    }
+
+    @GET
+    @Path("/{groupId}/albums/{albumId}/items")
+    @Produces("application/json")
+    public List<ItemOutput> getItemsFromAlbum(@PathParam("groupId") int groupId, @PathParam("albumId") int albumId) {
+        return groupController.getItems(groupId, albumId);
+    }
+
+    @GET
+    @Path("/{groupId}/albums/{albumId}/items/{itemId}")
+    @Produces("application/json")
+    public ItemOutput getItemsFromAlbum(@PathParam("groupId") int groupId, @PathParam("albumId") int albumId, @PathParam("itemId") int itemId) {
+        return groupController.getOneItem(groupId, albumId, itemId);
     }
 
     @POST
