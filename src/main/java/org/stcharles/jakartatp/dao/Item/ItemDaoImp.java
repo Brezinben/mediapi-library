@@ -14,13 +14,13 @@ public class ItemDaoImp implements ItemDao {
     private EntityManager em;
 
     @Override
-    public void persist(Item shape) {
-
+    public void persist(Item item) {
+        em.persist(item);
     }
 
     @Override
     public Item get(Integer id) {
-        return null;
+        return em.find(Item.class, id);
     }
 
     @Override
@@ -30,14 +30,14 @@ public class ItemDaoImp implements ItemDao {
 
     @Override
     public List<Item> getAllFromAlbum(Album album) {
-        return em.createQuery("select i from Item i where i.album = :album", Item.class)
+        return em.createQuery("select i from Item i where i.album = :album order by i.cratedAt", Item.class)
                 .setParameter("album", album)
                 .getResultList();
     }
 
     @Override
     public Item getOneFromAlbum(Album album, Integer itemId) {
-        return null;
+        return this.getAllFromAlbum(album).get(itemId);
     }
 
 

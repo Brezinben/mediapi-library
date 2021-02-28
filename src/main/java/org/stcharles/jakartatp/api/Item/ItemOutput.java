@@ -1,9 +1,20 @@
 package org.stcharles.jakartatp.api.Item;
 
 import org.stcharles.jakartatp.model.Item;
+import org.stcharles.jakartatp.model.ItemState;
+import org.stcharles.jakartatp.model.ItemType;
+
+import java.time.LocalDate;
 
 public class ItemOutput {
-    public ItemOutput(Item i) {
+    public ItemState state;
+    public ItemType type;
+    public LocalDate cratedAt;
 
+    public ItemOutput(Item i) {
+        this.state = i.getState();
+        this.type = i.getType();
+        this.cratedAt = i.getCratedAt();
     }
+
 }

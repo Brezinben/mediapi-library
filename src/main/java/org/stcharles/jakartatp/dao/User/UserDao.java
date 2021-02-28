@@ -10,4 +10,8 @@ public interface UserDao {
     List<User> getAll();
 
     User get(Integer id);
+
+    Integer count();
+
+    User getByEmail(String email);
 }

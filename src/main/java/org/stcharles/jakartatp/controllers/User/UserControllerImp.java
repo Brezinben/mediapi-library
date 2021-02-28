@@ -1,11 +1,15 @@
 package org.stcharles.jakartatp.controllers.User;
 
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
+import jakarta.xml.bind.ValidationException;
 import org.stcharles.jakartatp.api.User.UserOutput;
 import org.stcharles.jakartatp.dao.User.UserDao;
+import org.stcharles.jakartatp.model.User;
 import org.stcharles.jakartatp.qualifier.Prod;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -15,10 +19,16 @@ public class UserControllerImp implements UserController {
     @Prod
     private UserDao userDao;
 
-
     @Override
-    public UserOutput create(String firstName, String lastName, String email) {
-        return null;
+    @Transactional
+    public UserOutput create(String firstName, String lastName, String email) throws ValidationException {
+        Optional<User> validEmail = Optional.ofNullable(userDao.getByEmail(email));
+        if (validEmail.isPresent()) {
+            throw new ValidationException("L'email selectionner ne peut pas être insérer dans notre base");
+        }
+        User user = new User(firstName, lastName, email);
+        userDao.persist(user);
+        return new UserOutput(user);
     }
 
     @Override
@@ -34,5 +44,19 @@ public class UserControllerImp implements UserController {
         return Optional.ofNullable(userDao.get(id))
                 .map(UserOutput::new)
                 .orElseThrow(NotFoundException::new);
+    }
+
+    @Override
+    @Transactional
+    public Boolean delete(int userId) {
+        return null;
+    }
+
+    @Override
+    public ArrayList<UserOutput> getByEmail(String email) {
+        Optional<User> user = Optional.ofNullable(userDao.getByEmail(email));
+        ArrayList<UserOutput> list = new ArrayList();
+        list.add(new UserOutput(user.orElseThrow(NotFoundException::new)));
+        return list;
     }
 }

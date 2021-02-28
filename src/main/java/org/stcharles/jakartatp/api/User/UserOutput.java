@@ -6,10 +6,12 @@ public class UserOutput {
     public String firstName;
     public String lastName;
     public String email;
+    public String fullName;
 
     public UserOutput(User u) {
         this.email = u.getEmail();
         this.lastName = u.getLastName();
         this.firstName = u.getFirstName();
+        this.fullName = firstName + ' ' + lastName;
     }
 }

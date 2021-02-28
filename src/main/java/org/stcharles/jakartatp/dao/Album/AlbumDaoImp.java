@@ -16,7 +16,7 @@ public class AlbumDaoImp implements AlbumDao {
 
     @Override
     public void persist(Album album) {
-
+        em.persist(album);
     }
 
     @Override

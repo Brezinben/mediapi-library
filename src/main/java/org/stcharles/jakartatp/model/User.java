@@ -2,6 +2,7 @@ package org.stcharles.jakartatp.model;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -20,8 +21,9 @@ public class User {
     @Column(name = "email")
     private String email;
 
-    @OneToMany
-    private List<Loan> loans;
+    @OneToMany(targetEntity = Loan.class)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private final List<Loan> loans = new ArrayList<>();
 
     public User(String firstName, String lastName, String email) {
         this.firstName = firstName;

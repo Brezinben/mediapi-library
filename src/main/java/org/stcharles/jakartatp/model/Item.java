@@ -1,6 +1,9 @@
 package org.stcharles.jakartatp.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "items")
@@ -12,26 +15,43 @@ public class Item {
 
     @Column(name = "state")
     @Enumerated(EnumType.STRING)
+    @NotNull
     private ItemState state;
 
     @Column(name = "type")
     @Enumerated(EnumType.STRING)
+    @NotNull
     private ItemType type;
+
+    @Column(name = "created_at")
+    @NotNull
+    private LocalDate cratedAt;
 
     @ManyToOne
     @JoinColumn(name = "album_id")
+    @NotNull
     private Album album;
 
-    @OneToOne
+    @OneToOne(targetEntity = Loan.class)
+    @JoinColumn(name = "active_loan_id", unique = true)
     private Loan loan;
 
     public Item(ItemState state, ItemType type, Album album) {
         this.state = state;
         this.type = type;
         this.album = album;
+        this.cratedAt = LocalDate.now();
     }
 
     protected Item() {
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public LocalDate getCratedAt() {
+        return cratedAt;
     }
 
     public ItemState getState() {

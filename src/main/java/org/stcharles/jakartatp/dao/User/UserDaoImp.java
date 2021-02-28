@@ -14,7 +14,7 @@ public class UserDaoImp implements UserDao {
 
     @Override
     public void persist(User user) {
-
+        em.persist(user);
     }
 
     @Override
@@ -26,5 +26,22 @@ public class UserDaoImp implements UserDao {
     @Override
     public User get(Integer id) {
         return em.find(User.class, id);
+    }
+
+    @Override
+    public Integer count() {
+        return getAll().size();
+    }
+
+    @Override
+    public User getByEmail(String email) {
+        try {
+            return em.createQuery("select u from User u where u.email = :email ", User.class)
+                    .setParameter("email", email)
+                    .getSingleResult();
+        } catch (Exception e) {
+            //Alors on n'a pas de résultat
+            return null;
+        }
     }
 }

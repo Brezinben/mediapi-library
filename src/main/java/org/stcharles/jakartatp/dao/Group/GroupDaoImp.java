@@ -14,7 +14,7 @@ public class GroupDaoImp implements GroupDao {
 
     @Override
     public void persist(Group group) {
-
+        em.persist(group);
     }
 
     @Override

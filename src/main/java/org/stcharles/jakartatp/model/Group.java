@@ -23,8 +23,7 @@ public class Group {
     @Column(name = "created_at")
     private LocalDate created_at;
 
-    public Group(List<Album> albums, String name, LocalDate created_at) {
-        this.albums = albums;
+    public Group(String name, LocalDate created_at) {
         this.name = name;
         this.created_at = created_at;
     }
