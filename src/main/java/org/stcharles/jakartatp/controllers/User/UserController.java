@@ -3,7 +3,6 @@ package org.stcharles.jakartatp.controllers.User;
 import jakarta.xml.bind.ValidationException;
 import org.stcharles.jakartatp.api.User.UserOutput;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public interface UserController {
@@ -14,7 +13,9 @@ public interface UserController {
 
     UserOutput get(Integer id);
 
-    Boolean delete(int userId);
+    Boolean delete(Integer userId);
 
-    ArrayList<UserOutput> getByEmail(String email);
+    List<UserOutput> getByEmail(String email);
+
+    UserOutput update(Integer id, String firstName, String lastName, String email);
 }

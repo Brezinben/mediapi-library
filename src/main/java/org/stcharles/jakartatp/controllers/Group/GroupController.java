@@ -16,7 +16,7 @@ public interface GroupController {
      * @param id the id
      * @return GroupOutput
      */
-    GroupOutput get(int id);
+    GroupOutput get(Integer id);
 
     /**
      * @param albums    the albums
@@ -32,4 +32,5 @@ public interface GroupController {
      */
     List<GroupOutput> getByName(String name);
 
+    GroupOutput update(Integer groupId, String name, LocalDate createdAt);
 }

@@ -15,6 +15,7 @@ public class Group {
 
     @OneToMany(targetEntity = Album.class)
     @JoinColumn(name = "group_id", referencedColumnName = "id")
+    @OrderBy(value = "release")
     private List<Album> albums = new ArrayList<>();
 
     @Column(name = "name")
@@ -29,6 +30,14 @@ public class Group {
     }
 
     protected Group() {
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setCreated_at(LocalDate created_at) {
+        this.created_at = created_at;
     }
 
     public Integer getId() {

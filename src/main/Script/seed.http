@@ -1,0 +1,120 @@
+### Création d'un deuxième groupe avec des albums
+POST http://localhost:8080/jakartatp-1.0-SNAPSHOT/api/groups
+Content-Type: application/json
+Accept: application/json
+
+{
+  "createdAt": "2020-02-27",
+  "name": "Manafest",
+  "albums": [
+    {
+      "title": "Mon Super Album",
+      "release": "2020-02-27"
+    },
+    {
+      "title": "Mon Deuxième Album",
+      "release": "2020-02-28"
+    },
+    {
+      "title": "Mon Troisième Album",
+      "release": "2020-02-28"
+    },
+    {
+      "title": "Mon Quatrième Album",
+      "release": "2020-02-28"
+    }
+  ]
+}
+
+### Création d'un deuxième groupe avec des albums
+POST http://localhost:8080/jakartatp-1.0-SNAPSHOT/api/groups
+Content-Type: application/json
+Accept: application/json
+
+{
+  "createdAt": "2020-02-27",
+  "name": "Three Days Grace",
+  "albums": [
+    {
+      "title": "Three Days Grace",
+      "release": "2003-02-27"
+    },
+    {
+      "title": "One-X",
+      "release": "2006-02-27"
+    },
+    {
+      "title": "Life Starts Now",
+      "release": "2009-02-27"
+    },
+    {
+      "title": "Transit Of Venus",
+      "release": "2012-02-27"
+    },
+    {
+      "title": "Human",
+      "release": "2015-02-27"
+    },
+    {
+      "title": "Outsider",
+      "release": "2018-02-27"
+    }
+  ]
+}
+
+### Création multiple d'item
+POST http://localhost:8080/jakartatp-1.0-SNAPSHOT/api/groups/2/albums/0/items
+Content-Type: application/json
+Accept: application/json
+
+[
+  {
+    "state": "NEUF",
+    "type": "CD",
+    "nombre": 5
+  },
+  {
+    "state": "NEUF",
+    "type": "VINYLE",
+    "nombre": 5
+  }
+]
+
+###Création d'un user
+POST http://localhost:8080/jakartatp-1.0-SNAPSHOT/api/users
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "benjamin@hotmail.fr",
+  "firstName": "Benjamin",
+  "lastName": "David"
+}
+
+###Création des empreints
+POST http://localhost:8080/jakartatp-1.0-SNAPSHOT/api/users/1/loans
+Content-Type: application/json
+Accept: application/json
+
+[
+  {
+    "itemId": 5
+  },
+  {
+    "itemId": 1
+  },
+  {
+    "itemId": 4
+  }
+]
+
+###
+PUT http://localhost:8080/jakartatp-1.0-SNAPSHOT/api/users/1/loans/0
+Content-Type: application/json
+Accept: application/json
+
+{
+  "state": "RENDU"
+}
+
+###

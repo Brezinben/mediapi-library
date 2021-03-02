@@ -58,4 +58,15 @@ public class LoanResource {
                 .entity(loan)
                 .build();
     }
+
+    @PUT
+    @Path("/{id}")
+    @Consumes("application/json")
+    public Response update(@PathParam("userId") Integer userId, @PathParam("id") Integer loanId, BackLoanInput backLoanInput) {
+        LoanOutput loan = loanController.update(userId, loanId, backLoanInput.state);
+        return Response
+                .status(Response.Status.OK)
+                .entity(loan)
+                .build();
+    }
 }

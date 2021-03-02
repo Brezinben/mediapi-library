@@ -38,6 +38,17 @@ public class ItemResource {
                 .build();
     }
 
+    @PUT
+    @Path("/{itemId}")
+    @Consumes("application/json")
+    public Response update(@PathParam("groupId") Integer groupId, @PathParam("albumId") Integer albumId, @PathParam("itemId") Integer itemId, ChangeItemInput itemInput) {
+        ItemOutput item = itemController.update(groupId, albumId, itemId, itemInput.state, itemInput.type);
+        return Response
+                .status(Response.Status.OK)
+                .entity(item)
+                .build();
+    }
+
 /*    @POST
     @Consumes("application/json")
     @Produces("application/json")

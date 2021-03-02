@@ -27,7 +27,7 @@ public class GroupResource {
     @GET
     @Path("/{groupId}")
     @Produces("application/json")
-    public GroupOutput get(@PathParam("groupId") int id) {
+    public GroupOutput get(@PathParam("groupId") Integer id) {
         return groupController.get(id);
     }
 
@@ -39,6 +39,17 @@ public class GroupResource {
         GroupOutput group = groupController.create(request.albums, request.name, request.createdAt);
         return Response
                 .status(Response.Status.CREATED)
+                .entity(group)
+                .build();
+    }
+
+    @PUT
+    @Path("/{groupId}")
+    @Consumes("application/json")
+    public Response update(@PathParam("groupId") Integer groupId, ChangeGroupInput groupInput) {
+        GroupOutput group = groupController.update(groupId, groupInput.name, groupInput.createdAt);
+        return Response
+                .status(Response.Status.OK)
                 .entity(group)
                 .build();
     }

@@ -23,8 +23,18 @@ public class Album {
     @Column(name = "release")
     private LocalDate release;
 
-    @OneToMany
+    @OneToMany(targetEntity = Item.class)
+    @JoinColumn(name = "album_id", nullable = false)
+    @OrderBy(value = "cratedAt")
     private List<Item> items;
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setRelease(LocalDate release) {
+        this.release = release;
+    }
 
     public Album(Group group, String title, LocalDate release, List<Item> items) {
         this.group = group;

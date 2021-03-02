@@ -36,8 +36,8 @@ public class Loan {
     @NotNull
     private Item item;
 
-    public Loan(LocalDate dateStart, User user, Item item) {
-        this.dateStart = dateStart;
+    public Loan(User user, Item item) {
+        this.dateStart = LocalDate.now();
         //La date de fin doit être inférieur a trois semaine
         this.dateEnd = dateStart.plusWeeks(3);
         this.user = user;

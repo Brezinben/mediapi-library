@@ -1,6 +1,5 @@
 package org.stcharles.jakartatp.dao.Item;
 
-import org.stcharles.jakartatp.model.Album;
 import org.stcharles.jakartatp.model.Item;
 
 import java.util.List;
@@ -12,7 +11,4 @@ public interface ItemDao {
 
     List<Item> getAll();
 
-    List<Item> getAllFromAlbum(Album album);
-
-    Item getOneFromAlbum(Album album, Integer itemId);
 }

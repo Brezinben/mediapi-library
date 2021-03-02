@@ -11,14 +11,14 @@ public interface AlbumController {
      * @param id the id
      * @return List<AlbumOutput>
      */
-    List<AlbumOutput> getAll(int id);
+    List<AlbumOutput> getAll(Integer id);
 
     /**
      * @param groupId the group identifier
      * @param albumId the album identifier
      * @return AlbumOutput
      */
-    AlbumOutput get(int groupId, int albumId);
+    AlbumOutput get(Integer groupId, Integer albumId);
 
     /**
      * @param title of album to find
@@ -27,4 +27,6 @@ public interface AlbumController {
     List<AlbumOutput> getByTitle(String title);
 
     AlbumOutput create(Integer groupId, String title, LocalDate release);
+
+    AlbumOutput update(Integer groupId, Integer albumId, String title, LocalDate release);
 }

@@ -33,7 +33,7 @@ public class GroupControllerImp implements GroupController {
      * @Override Gets the
      */
 
-    public GroupOutput get(int id) {
+    public GroupOutput get(Integer id) {
 
         return Optional.ofNullable(groupDao.get(id))
                 .map(GroupOutput::new)
@@ -47,6 +47,15 @@ public class GroupControllerImp implements GroupController {
     @Override
     public List<GroupOutput> getByName(String name) {
         return null;
+    }
+
+    @Override
+    @Transactional
+    public GroupOutput update(Integer groupId, String name, LocalDate createdAt) {
+        Group group = Optional.ofNullable(groupDao.get(groupId)).orElseThrow(NotFoundException::new);
+        group.setCreated_at(createdAt);
+        group.setName(name);
+        return new GroupOutput(group);
     }
 
     /**

@@ -12,6 +12,7 @@ import org.stcharles.jakartatp.dao.User.UserDao;
 import org.stcharles.jakartatp.model.*;
 import org.stcharles.jakartatp.qualifier.Prod;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -83,7 +84,7 @@ public class LoanControllerImp implements LoanController {
         //On les transforment en Loan
         List<Loan> loanList = loans.stream()
                 .filter(distinctByItemId(loan -> loan.itemId))
-                .map(loanInput -> new Loan(loanInput.dateStart, user, getWantedItem(loanInput.itemId)))
+                .map(loanInput -> new Loan(user, getWantedItem(loanInput.itemId)))
                 .collect(Collectors.toList());
 
         //On les persistent si l'item est valide
@@ -106,6 +107,23 @@ public class LoanControllerImp implements LoanController {
                 .filter(loan -> loan.getStatus() == status)
                 .map(LoanOutput::new)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
+    public LoanOutput update(Integer userId, Integer loanId, LoanState state) {
+        Loan loan = getWantedLoan(userId, loanId);
+        if (loan.getStatus() == LoanState.RENDU) {
+            throw new ValidationException("Cette emprunt est déjà rendu !");
+        }
+        if (state == LoanState.RENDU) {
+            loan.setStatus(state);
+            loan.getItem().setLoan(null);
+            loan.setDateEnd(LocalDate.now());
+        } else if (state == LoanState.EN_RETARD) {
+            loan.setStatus(state);
+        }
+        return new LoanOutput(loan);
     }
 
     private Item getWantedItem(Integer itemId) {

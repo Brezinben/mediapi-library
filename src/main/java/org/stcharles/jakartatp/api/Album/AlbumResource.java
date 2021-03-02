@@ -16,7 +16,7 @@ public class AlbumResource {
 
     @GET
     @Produces("application/json")
-    public List<AlbumOutput> getAll(@PathParam("groupId") int groupId, @QueryParam("title") String title) {
+    public List<AlbumOutput> getAll(@PathParam("groupId") Integer groupId, @QueryParam("title") String title) {
         if (title != null) {
             return albumController.getByTitle(title);
         }
@@ -26,7 +26,7 @@ public class AlbumResource {
     @GET
     @Path("/{albumId}")
     @Produces("application/json")
-    public AlbumOutput get(@PathParam("groupId") int groupId, @PathParam("albumId") int albumId) {
+    public AlbumOutput get(@PathParam("groupId") Integer groupId, @PathParam("albumId") Integer albumId) {
         return albumController.get(groupId, albumId);
     }
 
@@ -38,6 +38,17 @@ public class AlbumResource {
         AlbumOutput album = albumController.create(groupId, request.title, request.release);
         return Response
                 .status(Response.Status.CREATED)
+                .entity(album)
+                .build();
+    }
+
+    @PUT
+    @Path("/{albumId}")
+    @Consumes("application/json")
+    public Response update(@PathParam("groupId") Integer groupId, @PathParam("albumId") Integer albumId, AlbumInput albumInput) {
+        AlbumOutput album = albumController.update(groupId, albumId, albumInput.title, albumInput.release);
+        return Response
+                .status(Response.Status.OK)
                 .entity(album)
                 .build();
     }

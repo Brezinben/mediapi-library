@@ -2,8 +2,8 @@ package org.stcharles.jakartatp.controllers.User;
 
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
+import jakarta.validation.ValidationException;
 import jakarta.ws.rs.NotFoundException;
-import jakarta.xml.bind.ValidationException;
 import org.stcharles.jakartatp.api.User.UserOutput;
 import org.stcharles.jakartatp.dao.User.UserDao;
 import org.stcharles.jakartatp.model.User;
@@ -24,7 +24,7 @@ public class UserControllerImp implements UserController {
     public UserOutput create(String firstName, String lastName, String email) throws ValidationException {
         Optional<User> validEmail = Optional.ofNullable(userDao.getByEmail(email));
         if (validEmail.isPresent()) {
-            throw new ValidationException("L'email selectionner ne peut pas être insérer dans notre base");
+            throw new ValidationException("L'email sélectionner ne peut pas être insérer dans notre base");
         }
         User user = new User(firstName, lastName, email);
         userDao.persist(user);
@@ -48,15 +48,31 @@ public class UserControllerImp implements UserController {
 
     @Override
     @Transactional
-    public Boolean delete(int userId) {
+    public Boolean delete(Integer userId) {
         return null;
     }
 
     @Override
-    public ArrayList<UserOutput> getByEmail(String email) {
+    public List<UserOutput> getByEmail(String email) {
         Optional<User> user = Optional.ofNullable(userDao.getByEmail(email));
         ArrayList<UserOutput> list = new ArrayList();
         list.add(new UserOutput(user.orElseThrow(NotFoundException::new)));
         return list;
     }
+
+    @Override
+    @Transactional
+    public UserOutput update(Integer id, String firstName, String lastName, String email) {
+        User user = Optional.ofNullable(userDao.get(id)).orElseThrow(NotFoundException::new);
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
+        Optional<User> emailExist = Optional.ofNullable(userDao.getByEmail(email));
+        if (emailExist.isPresent()) {
+            throw new ValidationException("L'email ne peut pas être enregistrer car il existe déjà dans notre base");
+        }
+        user.setEmail(email);
+        return new UserOutput(user);
+    }
+
+
 }

@@ -23,6 +23,10 @@ public class Item {
     @NotNull
     private ItemType type;
 
+    public void setType(ItemType type) {
+        this.type = type;
+    }
+
     @Column(name = "created_at")
     @NotNull
     private LocalDate cratedAt;

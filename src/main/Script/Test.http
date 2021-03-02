@@ -1,0 +1,55 @@
+###Test des erreurs
+###Test créatton d'un user avec un email existant
+POST http://localhost:8080/jakartatp-1.0-SNAPSHOT/api/users
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "benjamin@hotmail.fr",
+  "firstName": "Test",
+  "lastName": "Test"
+}
+
+###Test création de 6 items (5 max)
+POST http://localhost:8080/jakartatp-1.0-SNAPSHOT/api/users/1/loans
+Content-Type: application/json
+Accept: application/json
+
+[
+  {
+    "dateStart": "2020-02-27",
+    "itemId": 1
+  },
+  {
+    "dateStart": "2020-02-27",
+    "itemId": 2
+  },
+  {
+    "dateStart": "2020-02-27",
+    "itemId": 7
+  },
+  {
+    "dateStart": "2020-02-27",
+    "itemId": 8
+  },
+  {
+    "dateStart": "2020-02-27",
+    "itemId": 9
+  },
+  {
+    "dateStart": "2020-02-27",
+    "itemId": 10
+  }
+]
+
+###Test d'un loans avec un item déja associé.
+POST http://localhost:8080/jakartatp-1.0-SNAPSHOT/api/users/1/loans
+Content-Type: application/json
+Accept: application/json
+
+[
+  {
+    "dateStart": "2020-02-27",
+    "itemId": 6
+  }
+]

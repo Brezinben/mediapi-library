@@ -27,16 +27,16 @@ public class AlbumControllerImp implements AlbumController {
     private GroupDao groupDao;
 
     @Override
-    public List<AlbumOutput> getAll(int groupId) {
-        Optional<Group> group = Optional.ofNullable(groupDao.get(groupId));
-        return albumDao.getAlbumsFromGroup(group.orElseThrow(NotFoundException::new))
-                .stream()
+    public List<AlbumOutput> getAll(Integer groupId) {
+        Group group = Optional.ofNullable(groupDao.get(groupId)).orElseThrow(NotFoundException::new);
+        List<Album> albums = Optional.ofNullable(group.getAlbums()).orElseThrow(NotFoundException::new);
+        return albums.stream()
                 .map(AlbumOutput::new)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public AlbumOutput get(int groupId, int albumId) {
+    public AlbumOutput get(Integer groupId, Integer albumId) {
         Album wantedAlbum = getWantedAlbum(groupId, albumId);
         return new AlbumOutput(wantedAlbum);
     }
@@ -49,14 +49,29 @@ public class AlbumControllerImp implements AlbumController {
     @Override
     @Transactional
     public AlbumOutput create(Integer groupId, String title, LocalDate release) {
+        albumValidation(groupId, title);
+        Optional<Group> group = Optional.ofNullable(groupDao.get(groupId));
+        Album album = new Album(group.orElseThrow(NotFoundException::new), title, release, null);
+        albumDao.persist(album);
+        return new AlbumOutput(album);
+    }
+
+    private void albumValidation(Integer groupId, String title) {
         //Comme un groupe n'a pas 100K Album je fait le filtre sur le possible cache de this.getAll.
         boolean exist = getAll(groupId).stream().anyMatch(a -> a.title.toLowerCase(Locale.ROOT).equals(title.toLowerCase(Locale.ROOT)));
         if (exist) {
             throw new ValidationException("L'album '" + title + "' existe déjà pour ce groupe.");
         }
-        Optional<Group> group = Optional.ofNullable(groupDao.get(groupId));
-        Album album = new Album(group.orElseThrow(NotFoundException::new), title, release, null);
-        albumDao.persist(album);
+    }
+
+
+    @Override
+    @Transactional
+    public AlbumOutput update(Integer groupId, Integer albumId, String title, LocalDate release) {
+        Album album = getWantedAlbum(groupId, albumId);
+        albumValidation(groupId, title);
+        album.setRelease(release);
+        album.setTitle(title);
         return new AlbumOutput(album);
     }
 
@@ -68,9 +83,10 @@ public class AlbumControllerImp implements AlbumController {
      * @return Album
      * @Override
      */
-    private Album getWantedAlbum(int groupId, int albumId) {
-        Optional<Group> group = Optional.ofNullable(groupDao.get(groupId));
-        Optional<Album> album = Optional.ofNullable(albumDao.getAlbumFromGroup(group.orElseThrow(NotFoundException::new), albumId));
-        return album.orElseThrow(NotFoundException::new);
+    private Album getWantedAlbum(Integer groupId, Integer albumId) {
+        Group group = Optional.ofNullable(groupDao.get(groupId)).orElseThrow(NotFoundException::new);
+        List<Album> albums = Optional.ofNullable(group.getAlbums()).orElseThrow(NotFoundException::new);
+        return Optional.ofNullable(albums.get(albumId)).orElseThrow(NotFoundException::new);
     }
+
 }

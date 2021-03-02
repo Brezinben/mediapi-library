@@ -26,7 +26,7 @@ public class UserResource {
     @GET
     @Path("/{id}")
     @Produces("application/json")
-    public UserOutput get(@PathParam("id") int id) {
+    public UserOutput get(@PathParam("id") Integer id) {
         return userController.get(id);
     }
 
@@ -38,6 +38,17 @@ public class UserResource {
         UserOutput user = userController.create(request.firstName, request.lastName, request.email);
         return Response
                 .status(Response.Status.CREATED)
+                .entity(user)
+                .build();
+    }
+
+    @PUT
+    @Path("/{id}")
+    @Consumes("application/json")
+    public Response update(@PathParam("id") Integer id, UserInput userInput) {
+        UserOutput user = userController.update(id, userInput.firstName, userInput.lastName, userInput.email);
+        return Response
+                .status(Response.Status.OK)
                 .entity(user)
                 .build();
     }

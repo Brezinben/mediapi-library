@@ -94,15 +94,12 @@ On peut aller jusqu'a 5 enregistrement :
 ````json
 [
   {
-    "dateStart": "2020-02-27",
     "itemId": 5
   },
   {
-    "dateStart": "2020-02-27",
     "itemId": 5
   },
   {
-    "dateStart": "2020-02-27",
     "itemId": 6
   }
 ]
@@ -171,14 +168,14 @@ Sur ``/api/groups/:id/albums/:id/items/``
 
 Viendra créer 9 items-VINYLE et 10 item-CD sur l'album.
 
-Valeur posible pour le state ( *les valeurs de ItemState.java* ) :
+Valeur posible pour le state ( *les valeurs d’ItemState.java* ) :
 
 - NEUF
 - CONVENABLE
 - ABIMER
 - INUTILISABLE
 
-Valeur posible pour le state ( *les valeurs de ItemType.java* ) :
+Valeur posible pour le state ( *les valeurs d’ItemType.java* ) :
 
 - CD
 - VINYLE
@@ -188,23 +185,63 @@ Valeur posible pour le state ( *les valeurs de ItemType.java* ) :
 
 ### User
 
-    TODO
+Sur ``api/users/:id/``
+
+````json
+{
+  "email": "benjamin@hotmail.fr",
+  "firstName": "Test",
+  "lastName": "Test"
+}
+````
+
+Une erreur sera levée si l'email a remplacé existe deja en BDD
 
 ### Loan
 
-    TODO
+Sur ``api/users/:id/loans/:id``
+
+`````json
+{
+  "state": "RENDU"
+}
+`````
+
+Cette route sert principalement à rendre les emprunts. Elle peut prendre également la valeur "*EN_RETARD*". Quand un
+loan est rendu on enlève le lien avec l'item qui était lié.
 
 ### Group
 
-    TODO
+Sur ``api/groups/:id``
+
+````json
+{
+  "createdAt": "2020-02-27",
+  "name": "Manafest-Test"
+}
+````
 
 ### Album
 
-    TODO
+Sur ``api/groups/:id/albums/:id``
+
+````json
+{
+  "title": "Mon Super Album Test",
+  "release": "2020-02-27"
+}
+````
 
 ### Item
 
-    TODO
+Sur ``api/groups/:id/albums/:id/items/:id``
+
+````json
+{
+  "state": "NEUF",
+  "type": "VINYLE"
+}
+````
 
 ## ``DELETE``
 

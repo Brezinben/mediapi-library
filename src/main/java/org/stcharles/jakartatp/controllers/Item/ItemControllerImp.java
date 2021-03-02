@@ -8,9 +8,7 @@ import org.stcharles.jakartatp.api.Item.ItemOutput;
 import org.stcharles.jakartatp.dao.Album.AlbumDao;
 import org.stcharles.jakartatp.dao.Group.GroupDao;
 import org.stcharles.jakartatp.dao.Item.ItemDao;
-import org.stcharles.jakartatp.model.Album;
-import org.stcharles.jakartatp.model.Group;
-import org.stcharles.jakartatp.model.Item;
+import org.stcharles.jakartatp.model.*;
 import org.stcharles.jakartatp.qualifier.Prod;
 
 import java.util.ArrayList;
@@ -33,19 +31,14 @@ public class ItemControllerImp implements ItemController {
     private ItemDao itemDao;
 
     @Override
-    public ItemOutput create(String name, int sides) {
-        return null;
-    }
-
-    @Override
     public Optional<ItemOutput> get(Integer id) {
         return Optional.empty();
     }
 
     @Override
     public List<ItemOutput> getAll(Integer groupId, Integer albumId) {
-        Album album = this.getWantedAlbum(groupId, albumId);
-        return itemDao.getAllFromAlbum(album)
+        return this.getWantedAlbum(groupId, albumId)
+                .getItems()
                 .stream()
                 .map(ItemOutput::new)
                 .collect(Collectors.toList());
@@ -53,9 +46,8 @@ public class ItemControllerImp implements ItemController {
 
     @Override
     public ItemOutput getOneFromAlbum(Integer groupId, Integer albumId, Integer itemId) {
-        Album album = this.getWantedAlbum(groupId, albumId);
-        Optional<Item> item = Optional.ofNullable(itemDao.getOneFromAlbum(album, itemId));
-        return new ItemOutput(item.orElseThrow(NotFoundException::new));
+        Item item = getWantedItem(groupId, albumId, itemId);
+        return new ItemOutput(item);
     }
 
     @Override
@@ -76,6 +68,7 @@ public class ItemControllerImp implements ItemController {
 
         for (ItemInput itemInput : items) {
             Integer toAdd = itemInput.nombre;
+            if (toAdd < 0) continue;
             for (int j = 0; j < toAdd; j++) {
                 itemInputList.add(itemInput);
             }
@@ -92,6 +85,15 @@ public class ItemControllerImp implements ItemController {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    @Transactional
+    public ItemOutput update(Integer groupId, Integer albumId, Integer itemId, ItemState state, ItemType type) {
+        Item item = getWantedItem(groupId, albumId, itemId);
+        item.setState(state);
+        item.setType(type);
+        return new ItemOutput(item);
+    }
+
     /**
      * Try to get the wanted album
      *
@@ -101,8 +103,14 @@ public class ItemControllerImp implements ItemController {
      * @Override
      */
     private Album getWantedAlbum(int groupId, int albumId) {
-        Optional<Group> group = Optional.ofNullable(groupDao.get(groupId));
-        Optional<Album> album = Optional.ofNullable(albumDao.getAlbumFromGroup(group.orElseThrow(NotFoundException::new), albumId));
-        return album.orElseThrow(NotFoundException::new);
+        Group group = Optional.ofNullable(groupDao.get(groupId)).orElseThrow(NotFoundException::new);
+        List<Album> albums = Optional.ofNullable(group.getAlbums()).orElseThrow(NotFoundException::new);
+        return Optional.ofNullable(albums.get(albumId)).orElseThrow(NotFoundException::new);
+    }
+
+    private Item getWantedItem(Integer groupId, Integer albumId, Integer itemId) {
+        Album album = this.getWantedAlbum(groupId, albumId);
+        List<Item> items = Optional.ofNullable(album.getItems()).orElseThrow(NotFoundException::new);
+        return Optional.ofNullable(items.get(itemId)).orElseThrow(NotFoundException::new);
     }
 }
