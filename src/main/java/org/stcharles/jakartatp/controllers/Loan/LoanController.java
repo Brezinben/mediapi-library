@@ -20,4 +20,6 @@ public interface LoanController {
     List<LoanOutput> getByStatus(Integer userId, LoanState status);
 
     LoanOutput update(Integer userId, Integer loanId, LoanState state);
+
+    Boolean remove(Integer userId, Integer loanId);
 }

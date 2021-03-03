@@ -21,4 +21,9 @@ public class AlbumDaoImp implements AlbumDao {
     public Group get(Integer id) {
         return null;
     }
+
+    @Override
+    public void remove(Album album) {
+        em.remove(album);
+    }
 }

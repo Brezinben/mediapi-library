@@ -14,4 +14,6 @@ public interface UserDao {
     Integer count();
 
     User getByEmail(String email);
+
+    void remove(User user);
 }

@@ -24,10 +24,10 @@ public class UserResource {
     }
 
     @GET
-    @Path("/{id}")
+    @Path("/{userId}")
     @Produces("application/json")
-    public UserOutput get(@PathParam("id") Integer id) {
-        return userController.get(id);
+    public UserOutput get(@PathParam("userId") Integer userId) {
+        return userController.get(userId);
     }
 
 
@@ -43,13 +43,22 @@ public class UserResource {
     }
 
     @PUT
-    @Path("/{id}")
+    @Path("/{userId}")
     @Consumes("application/json")
-    public Response update(@PathParam("id") Integer id, UserInput userInput) {
-        UserOutput user = userController.update(id, userInput.firstName, userInput.lastName, userInput.email);
+    public Response update(@PathParam("userId") Integer userId, UserInput userInput) {
+        UserOutput user = userController.update(userId, userInput.firstName, userInput.lastName, userInput.email);
         return Response
                 .status(Response.Status.OK)
                 .entity(user)
                 .build();
+    }
+
+    @DELETE
+    @Path("/{userId}")
+    @Consumes("application/json")
+    public Response remove(@PathParam("userId") Integer userId) {
+        Boolean deleted = userController.remove(userId);
+        Response.Status code = deleted ? Response.Status.NO_CONTENT : Response.Status.BAD_REQUEST;
+        return Response.status(code).build();
     }
 }

@@ -11,4 +11,5 @@ public interface ItemDao {
 
     List<Item> getAll();
 
+    void remove(Item item);
 }

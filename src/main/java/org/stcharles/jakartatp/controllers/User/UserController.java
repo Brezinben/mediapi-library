@@ -18,4 +18,6 @@ public interface UserController {
     List<UserOutput> getByEmail(String email);
 
     UserOutput update(Integer id, String firstName, String lastName, String email);
+
+    Boolean remove(Integer userId);
 }

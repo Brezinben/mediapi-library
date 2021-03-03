@@ -53,4 +53,13 @@ public class GroupResource {
                 .entity(group)
                 .build();
     }
+
+    @DELETE
+    @Path("/{groupId}")
+    @Consumes("application/json")
+    public Response remove(@PathParam("groupId") Integer groupId) {
+        Boolean deleted = groupController.remove(groupId);
+        Response.Status code = deleted ? Response.Status.NO_CONTENT : Response.Status.BAD_REQUEST;
+        return Response.status(code).build();
+    }
 }

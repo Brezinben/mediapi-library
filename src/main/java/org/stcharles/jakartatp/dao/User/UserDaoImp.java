@@ -44,4 +44,9 @@ public class UserDaoImp implements UserDao {
             return null;
         }
     }
+
+    @Override
+    public void remove(User user) {
+        em.remove(user);
+    }
 }

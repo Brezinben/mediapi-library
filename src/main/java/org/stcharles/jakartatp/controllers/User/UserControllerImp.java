@@ -6,12 +6,14 @@ import jakarta.validation.ValidationException;
 import jakarta.ws.rs.NotFoundException;
 import org.stcharles.jakartatp.api.User.UserOutput;
 import org.stcharles.jakartatp.dao.User.UserDao;
+import org.stcharles.jakartatp.model.LoanState;
 import org.stcharles.jakartatp.model.User;
 import org.stcharles.jakartatp.qualifier.Prod;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public class UserControllerImp implements UserController {
@@ -54,9 +56,9 @@ public class UserControllerImp implements UserController {
 
     @Override
     public List<UserOutput> getByEmail(String email) {
-        Optional<User> user = Optional.ofNullable(userDao.getByEmail(email));
-        ArrayList<UserOutput> list = new ArrayList();
-        list.add(new UserOutput(user.orElseThrow(NotFoundException::new)));
+        User user = Optional.ofNullable(userDao.getByEmail(email)).orElseThrow(NotFoundException::new);
+        List<UserOutput> list = new ArrayList();
+        list.add(new UserOutput(user));
         return list;
     }
 
@@ -72,6 +74,22 @@ public class UserControllerImp implements UserController {
         }
         user.setEmail(email);
         return new UserOutput(user);
+    }
+
+    @Override
+    @Transactional
+    public Boolean remove(Integer id) {
+        User user = Optional.ofNullable(userDao.get(id)).orElseThrow(NotFoundException::new);
+        if (user.getLoans().stream().anyMatch(loan -> loan.getStatus().equals(LoanState.EN_COURS))) {
+            throw new ValidationException("Il y a des emprunts en cours vous ne pouvez pas supprimer cette utilisateur !");
+        }
+        try {
+            userDao.remove(user);
+            return true;
+        } catch (Exception exception) {
+            Logger.getAnonymousLogger(exception.getMessage());
+            return false;
+        }
     }
 
 

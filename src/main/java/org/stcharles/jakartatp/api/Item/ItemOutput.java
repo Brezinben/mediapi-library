@@ -10,11 +10,13 @@ public class ItemOutput {
     public ItemState state;
     public ItemType type;
     public LocalDate cratedAt;
+    public Integer id;
 
     public ItemOutput(Item i) {
         this.state = i.getState();
         this.type = i.getType();
         this.cratedAt = i.getCratedAt();
+        this.id = i.getId();
     }
 
 }

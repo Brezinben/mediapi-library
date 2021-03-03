@@ -33,4 +33,6 @@ public interface GroupController {
     List<GroupOutput> getByName(String name);
 
     GroupOutput update(Integer groupId, String name, LocalDate createdAt);
+
+    Boolean remove(Integer groupId);
 }

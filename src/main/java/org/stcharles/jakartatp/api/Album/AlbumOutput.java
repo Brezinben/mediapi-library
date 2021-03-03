@@ -9,10 +9,11 @@ public class AlbumOutput {
     public String title;
     public LocalDate release;
     public GroupOutput group;
+    public Integer id;
 
     public AlbumOutput(Album a) {
+        this.id = a.getId();
         this.title = a.getTitle();
         this.release = a.getRelease();
-        // this.group = new GroupOutput(a.getGroup());
     }
 }

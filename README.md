@@ -1,5 +1,8 @@
 Voici la doc de l'api, toutes les requête ci- dessous sont préfixer par : http://localhost:8080/jakartatp-1.0-SNAPSHOT/
 
+Dès fois j'ai préféré utiliser les streams au lieux d'une requête en base pour m'exercer. Car je ne savais pas vraiment
+ce qui était le plus optimizé.
+
 ## ``GET``
 
 ### User
@@ -245,24 +248,38 @@ Sur ``api/groups/:id/albums/:id/items/:id``
 
 ## ``DELETE``
 
+Si tout c'est bien passer alors en renvoie une 204.
+
 ### User
 
-    TODO
+Sur ``api/users/:id``
+
+On ne peut pas supprimer un utilisateur qui a des loans qui sont EN_COURS.
 
 ### Loan
 
-    TODO
+Sur ``api/users/:id/loans/:id``
+
+On ne peut pas supprimer un loan qui est EN_COURS.
+
+Cette route ne devrait jamais être utilisé car on l'utilise pour l'historique.
 
 ### Group
 
-    TODO
+Sur ``api/groups/:id``
+
+On ne peut pas supprimer un groupe avec des albums
 
 ### Album
 
-    TODO
+Sur ``api/groups/:id/albums/:id``
+
+On ne peut pas supprimer un album avec des items
 
 ### Item
 
-    TODO
+Sur ``api/groups/:id/albums/:id/items``
+
+On ne peut pas supprimer un item qui est emprunté.
 
 

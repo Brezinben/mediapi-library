@@ -22,20 +22,13 @@ public class Item {
     @Enumerated(EnumType.STRING)
     @NotNull
     private ItemType type;
-
-    public void setType(ItemType type) {
-        this.type = type;
-    }
-
     @Column(name = "created_at")
     @NotNull
     private LocalDate cratedAt;
-
     @ManyToOne
     @JoinColumn(name = "album_id")
     @NotNull
     private Album album;
-
     @OneToOne(targetEntity = Loan.class)
     @JoinColumn(name = "active_loan_id", unique = true)
     private Loan loan;
@@ -68,6 +61,10 @@ public class Item {
 
     public ItemType getType() {
         return type;
+    }
+
+    public void setType(ItemType type) {
+        this.type = type;
     }
 
     public Album getAlbum() {

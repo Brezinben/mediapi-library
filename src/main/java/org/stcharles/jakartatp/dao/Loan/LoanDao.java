@@ -16,4 +16,6 @@ public interface LoanDao {
     List<Loan> getLoans(User user);
 
     Loan getOneLoanFromUser(User user, Integer loanId);
+
+    void remove(Loan loan);
 }

@@ -60,13 +60,23 @@ public class LoanResource {
     }
 
     @PUT
-    @Path("/{id}")
+    @Path("/{loanId}")
     @Consumes("application/json")
-    public Response update(@PathParam("userId") Integer userId, @PathParam("id") Integer loanId, BackLoanInput backLoanInput) {
+    public Response update(@PathParam("userId") Integer userId, @PathParam("loanId") Integer loanId, BackLoanInput backLoanInput) {
         LoanOutput loan = loanController.update(userId, loanId, backLoanInput.state);
         return Response
                 .status(Response.Status.OK)
                 .entity(loan)
                 .build();
     }
+
+    @DELETE
+    @Path("/{loanId}")
+    @Consumes("application/json")
+    public Response remove(@PathParam("userId") Integer userId, @PathParam("loanId") Integer loanId) {
+        Boolean deleted = loanController.remove(userId, loanId);
+        Response.Status code = deleted ? Response.Status.NO_CONTENT : Response.Status.BAD_REQUEST;
+        return Response.status(code).build();
+    }
+
 }

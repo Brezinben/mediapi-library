@@ -2,6 +2,7 @@ package org.stcharles.jakartatp.controllers.Item;
 
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
+import jakarta.validation.ValidationException;
 import jakarta.ws.rs.NotFoundException;
 import org.stcharles.jakartatp.api.Item.ItemInput;
 import org.stcharles.jakartatp.api.Item.ItemOutput;
@@ -14,6 +15,7 @@ import org.stcharles.jakartatp.qualifier.Prod;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 @Prod
@@ -37,7 +39,7 @@ public class ItemControllerImp implements ItemController {
 
     @Override
     public List<ItemOutput> getAll(Integer groupId, Integer albumId) {
-        return this.getWantedAlbum(groupId, albumId)
+        return getWantedAlbum(groupId, albumId)
                 .getItems()
                 .stream()
                 .map(ItemOutput::new)
@@ -94,6 +96,25 @@ public class ItemControllerImp implements ItemController {
         return new ItemOutput(item);
     }
 
+    @Override
+    @Transactional
+    public Boolean remove(Integer groupId, Integer albumId, Integer itemId) {
+        Item item = getWantedItem(groupId, albumId, itemId);
+        Optional<Loan> loan = Optional.ofNullable(item.getLoan());
+        if (loan.isPresent()) {
+            throw new ValidationException("Cette item est actuellement emprunté on ne peux donc le supprimer");
+        }
+
+        try {
+            itemDao.remove(item);
+            return true;
+        } catch (Exception exception) {
+            Logger.getAnonymousLogger(exception.getMessage());
+            return false;
+        }
+    }
+
+
     /**
      * Try to get the wanted album
      *
@@ -102,15 +123,22 @@ public class ItemControllerImp implements ItemController {
      * @return Album
      * @Override
      */
-    private Album getWantedAlbum(int groupId, int albumId) {
+    private Album getWantedAlbum(Integer groupId, Integer albumId) {
         Group group = Optional.ofNullable(groupDao.get(groupId)).orElseThrow(NotFoundException::new);
         List<Album> albums = Optional.ofNullable(group.getAlbums()).orElseThrow(NotFoundException::new);
-        return Optional.ofNullable(albums.get(albumId)).orElseThrow(NotFoundException::new);
+        return albums.stream()
+                .filter(album -> album.getId().equals(albumId))
+                .findFirst()
+                .orElseThrow(NotFoundException::new);
     }
 
     private Item getWantedItem(Integer groupId, Integer albumId, Integer itemId) {
-        Album album = this.getWantedAlbum(groupId, albumId);
+        Album album = getWantedAlbum(groupId, albumId);
         List<Item> items = Optional.ofNullable(album.getItems()).orElseThrow(NotFoundException::new);
-        return Optional.ofNullable(items.get(itemId)).orElseThrow(NotFoundException::new);
+        return items.stream()
+                .filter(item -> item.getId().equals(itemId))
+                .findFirst()
+                .orElseThrow(NotFoundException::new);
+
     }
 }

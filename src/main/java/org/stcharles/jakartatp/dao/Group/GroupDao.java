@@ -11,4 +11,5 @@ public interface GroupDao {
 
     Group get(Integer id);
 
+    void remove(Group group);
 }

@@ -23,4 +23,6 @@ public interface ItemController {
     ItemOutput create(ItemInput request, Integer groupId, Integer albumId);
 
     ItemOutput update(Integer groupId, Integer albumId, Integer itemId, ItemState state, ItemType type);
+
+    Boolean remove(Integer groupId, Integer albumId, Integer itemId);
 }

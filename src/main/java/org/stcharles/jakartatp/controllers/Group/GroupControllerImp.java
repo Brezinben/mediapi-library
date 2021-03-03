@@ -2,6 +2,7 @@ package org.stcharles.jakartatp.controllers.Group;
 
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
+import jakarta.validation.ValidationException;
 import jakarta.ws.rs.NotFoundException;
 import org.stcharles.jakartatp.api.Album.AlbumInput;
 import org.stcharles.jakartatp.api.Group.GroupOutput;
@@ -14,6 +15,7 @@ import org.stcharles.jakartatp.qualifier.Prod;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 @Prod
@@ -34,7 +36,6 @@ public class GroupControllerImp implements GroupController {
      */
 
     public GroupOutput get(Integer id) {
-
         return Optional.ofNullable(groupDao.get(id))
                 .map(GroupOutput::new)
                 .orElseThrow(NotFoundException::new);
@@ -58,13 +59,28 @@ public class GroupControllerImp implements GroupController {
         return new GroupOutput(group);
     }
 
+    @Override
+    @Transactional
+    public Boolean remove(Integer groupId) {
+        Group group = Optional.ofNullable(groupDao.get(groupId)).orElseThrow(NotFoundException::new);
+        if (group.getAlbums().size() > 0) {
+            throw new ValidationException("Il y a des albums liée a ce groupe veillez les supprimer avant.");
+        }
+        try {
+            groupDao.remove(group);
+            return true;
+        } catch (Exception exception) {
+            Logger.getAnonymousLogger(exception.getMessage());
+            return false;
+        }
+    }
+
     /**
      * @return List<GroupOutput>
      * @Override Gets the all
      */
 
     public List<GroupOutput> getAll() {
-
         return groupDao.getAll()
                 .stream()
                 .map(GroupOutput::new)

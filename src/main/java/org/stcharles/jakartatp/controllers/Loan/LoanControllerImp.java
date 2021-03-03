@@ -20,6 +20,7 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 @Prod
@@ -126,31 +127,48 @@ public class LoanControllerImp implements LoanController {
         return new LoanOutput(loan);
     }
 
+    @Override
+    @Transactional
+    public Boolean remove(Integer userId, Integer loanId) {
+        Loan loan = getWantedLoan(userId, loanId);
+        if (loan.getStatus().equals(LoanState.EN_COURS)) {
+            throw new ValidationException("Cette emprunt est actuellement utilisé, on ne peux donc le supprimer");
+        }
+        try {
+            loanDao.remove(loan);
+            return true;
+        } catch (Exception exception) {
+            Logger.getAnonymousLogger(exception.getMessage());
+            return false;
+        }
+    }
+
     private Item getWantedItem(Integer itemId) {
-        Optional<Item> item = Optional.ofNullable(itemDao.get(itemId));
-        return item.orElseThrow(NotFoundException::new);
+        return Optional.ofNullable(itemDao.get(itemId)).orElseThrow(NotFoundException::new);
+
     }
 
     private User getWantedUser(Integer id) {
-        Optional<User> user = Optional.ofNullable(userDao.get(id));
-        return user.orElseThrow(NotFoundException::new);
+        return Optional.ofNullable(userDao.get(id)).orElseThrow(NotFoundException::new);
     }
 
     private Loan getWantedLoan(Integer userId, Integer loanId) {
         User user = getWantedUser(userId);
-        Optional<Loan> loan = Optional.ofNullable(loanDao.getOneLoanFromUser(user, loanId));
-        return loan.orElseThrow(NotFoundException::new);
+        List<Loan> loans = Optional.ofNullable(user.getLoans()).orElseThrow(NotFoundException::new);
+        return loans.stream()
+                .filter(loan -> loan.getId().equals(loanId))
+                .findFirst()
+                .orElseThrow(NotFoundException::new);
     }
 
     private void itemValidation(Item item) {
-        //Si il est déja a quelqu'un
+        //Si il est deja a quelqu'un
         Optional<Loan> loan = Optional.ofNullable(item.getLoan());
         if (loan.isPresent()) {
             throw new ValidationException("L'item " + item.getId() + " ne peut vous être attribué");
         }
         //On empreinte pas un item inutilisable
         if (item.getState() == ItemState.INUTILISABLE) {
-            //TODO
             throw new ValidationException("Vous ne pouvez pas prendre un item (id :" + item.getId() + ") non utilisable");
         }
     }

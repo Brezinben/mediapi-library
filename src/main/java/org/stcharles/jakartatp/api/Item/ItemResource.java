@@ -49,6 +49,15 @@ public class ItemResource {
                 .build();
     }
 
+    @DELETE
+    @Path("/{itemId}")
+    @Consumes("application/json")
+    public Response remove(@PathParam("groupId") Integer groupId, @PathParam("albumId") Integer albumId, @PathParam("itemId") Integer itemId) {
+        Boolean deleted = itemController.remove(groupId, albumId, itemId);
+        Response.Status code = deleted ? Response.Status.NO_CONTENT : Response.Status.BAD_REQUEST;
+        return Response.status(code).build();
+    }
+
 /*    @POST
     @Consumes("application/json")
     @Produces("application/json")

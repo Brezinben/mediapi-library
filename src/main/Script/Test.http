@@ -53,3 +53,20 @@ Accept: application/json
     "itemId": 6
   }
 ]
+
+###Test du delete d'un group
+### Création d'un deuxième groupe avec des albums
+POST http://localhost:8080/jakartatp-1.0-SNAPSHOT/api/groups
+Content-Type: application/json
+Accept: application/json
+
+{
+  "createdAt": "2020-02-27",
+  "name": "Three Days Grace",
+  "albums": []
+}
+
+###
+DELETE http://localhost:8080/jakartatp-1.0-SNAPSHOT/api/groups/3
+Content-Type: application/json
+Accept: application/json

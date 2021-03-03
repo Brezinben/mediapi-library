@@ -9,8 +9,10 @@ import java.time.LocalDate;
 public class GroupOutput {
     public String name;
     public LocalDate created_at;
+    public Integer id;
 
     public GroupOutput(Group g) {
+        this.id = g.getId();
         this.name = g.getName();
         this.created_at = g.getCreated_at();
     }

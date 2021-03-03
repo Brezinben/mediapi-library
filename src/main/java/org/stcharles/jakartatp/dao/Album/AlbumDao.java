@@ -15,4 +15,5 @@ public interface AlbumDao {
      */
     Group get(Integer id);
 
+    void remove(Album album);
 }

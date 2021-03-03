@@ -15,6 +15,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 @Prod
@@ -75,6 +76,23 @@ public class AlbumControllerImp implements AlbumController {
         return new AlbumOutput(album);
     }
 
+    @Override
+    @Transactional
+    public Boolean remove(Integer groupId, Integer albumId) {
+        Album album = getWantedAlbum(groupId, albumId);
+        if (album.getItems().size() > 0) {
+            throw new ValidationException("Il y a des items liée a cette album veillez les supprimer avant.");
+        }
+
+        try {
+            albumDao.remove(album);
+            return true;
+        } catch (Exception exception) {
+            Logger.getAnonymousLogger(exception.getMessage());
+            return false;
+        }
+    }
+
     /**
      * Try to get the wanted album
      *
@@ -86,7 +104,10 @@ public class AlbumControllerImp implements AlbumController {
     private Album getWantedAlbum(Integer groupId, Integer albumId) {
         Group group = Optional.ofNullable(groupDao.get(groupId)).orElseThrow(NotFoundException::new);
         List<Album> albums = Optional.ofNullable(group.getAlbums()).orElseThrow(NotFoundException::new);
-        return Optional.ofNullable(albums.get(albumId)).orElseThrow(NotFoundException::new);
+        return albums.stream()
+                .filter(album -> album.getId().equals(albumId))
+                .findFirst()
+                .orElseThrow(NotFoundException::new);
     }
 
 }

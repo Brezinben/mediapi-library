@@ -41,4 +41,9 @@ public class LoanDaoImp implements LoanDao {
     public Loan getOneLoanFromUser(User user, Integer loanId) {
         return getLoans(user).get(loanId);
     }
+
+    @Override
+    public void remove(Loan loan) {
+        em.remove(loan);
+    }
 }

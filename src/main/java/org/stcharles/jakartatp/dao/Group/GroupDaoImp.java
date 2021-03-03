@@ -26,4 +26,9 @@ public class GroupDaoImp implements GroupDao {
     public Group get(Integer id) {
         return em.find(Group.class, id);
     }
+
+    @Override
+    public void remove(Group group) {
+        em.remove(group);
+    }
 }

@@ -32,14 +32,6 @@ public class Group {
     protected Group() {
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setCreated_at(LocalDate created_at) {
-        this.created_at = created_at;
-    }
-
     public Integer getId() {
         return id;
     }
@@ -56,7 +48,15 @@ public class Group {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public LocalDate getCreated_at() {
         return created_at;
+    }
+
+    public void setCreated_at(LocalDate created_at) {
+        this.created_at = created_at;
     }
 }

@@ -28,14 +28,6 @@ public class Album {
     @OrderBy(value = "cratedAt")
     private List<Item> items;
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public void setRelease(LocalDate release) {
-        this.release = release;
-    }
-
     public Album(Group group, String title, LocalDate release, List<Item> items) {
         this.group = group;
         this.title = title;
@@ -58,8 +50,16 @@ public class Album {
         return title;
     }
 
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     public LocalDate getRelease() {
         return release;
+    }
+
+    public void setRelease(LocalDate release) {
+        this.release = release;
     }
 
     public List<Item> getItems() {

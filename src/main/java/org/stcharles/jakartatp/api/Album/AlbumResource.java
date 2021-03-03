@@ -53,5 +53,14 @@ public class AlbumResource {
                 .build();
     }
 
+    @DELETE
+    @Path("/{albumId}")
+    @Consumes("application/json")
+    public Response remove(@PathParam("groupId") Integer groupId, @PathParam("albumId") Integer albumId) {
+        Boolean deleted = albumController.remove(groupId, albumId);
+        Response.Status code = deleted ? Response.Status.NO_CONTENT : Response.Status.BAD_REQUEST;
+        return Response.status(code).build();
+    }
+
 
 }

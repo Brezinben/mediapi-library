@@ -27,4 +27,9 @@ public class ItemDaoImp implements ItemDao {
         return null;
     }
 
+    @Override
+    public void remove(Item item) {
+        em.remove(item);
+    }
+
 }

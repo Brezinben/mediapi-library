@@ -29,4 +29,6 @@ public interface AlbumController {
     AlbumOutput create(Integer groupId, String title, LocalDate release);
 
     AlbumOutput update(Integer groupId, Integer albumId, String title, LocalDate release);
+
+    Boolean remove(Integer groupId, Integer albumId);
 }
