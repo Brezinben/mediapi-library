@@ -18,7 +18,7 @@ public class AlbumResource {
     @Produces("application/json")
     public List<AlbumOutput> getAll(@PathParam("groupId") Integer groupId, @QueryParam("title") String title) {
         if (title != null) {
-            return albumController.getByTitle(title);
+            return albumController.getByTitle(groupId, title);
         }
         return albumController.getAll(groupId);
     }

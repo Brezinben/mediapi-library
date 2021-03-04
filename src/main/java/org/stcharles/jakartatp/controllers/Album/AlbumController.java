@@ -21,10 +21,11 @@ public interface AlbumController {
     AlbumOutput get(Integer groupId, Integer albumId);
 
     /**
-     * @param title of album to find
+     * @param groupId
+     * @param title   of album to find
      * @return List<AlbumOutput>
      */
-    List<AlbumOutput> getByTitle(String title);
+    List<AlbumOutput> getByTitle(Integer groupId, String title);
 
     AlbumOutput create(Integer groupId, String title, LocalDate release);
 

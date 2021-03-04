@@ -6,6 +6,7 @@ import jakarta.validation.ValidationException;
 import jakarta.ws.rs.NotFoundException;
 import org.stcharles.jakartatp.api.Album.AlbumInput;
 import org.stcharles.jakartatp.api.Group.GroupOutput;
+import org.stcharles.jakartatp.controllers.FuzzyFinding.FuzzyFinding;
 import org.stcharles.jakartatp.dao.Album.AlbumDao;
 import org.stcharles.jakartatp.dao.Group.GroupDao;
 import org.stcharles.jakartatp.model.Album;
@@ -28,6 +29,9 @@ public class GroupControllerImp implements GroupController {
     @Prod
     private AlbumDao albumDao;
 
+    @Inject
+    @Prod
+    private FuzzyFinding fuzzyFinding;
 
     /**
      * @param id the id
@@ -47,7 +51,7 @@ public class GroupControllerImp implements GroupController {
      */
     @Override
     public List<GroupOutput> getByName(String name) {
-        return null;
+        return fuzzyFinding.getGroupsByName(name).stream().map(GroupOutput::new).collect(Collectors.toList());
     }
 
     @Override

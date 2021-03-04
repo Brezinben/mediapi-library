@@ -31,4 +31,9 @@ public class GroupDaoImp implements GroupDao {
     public void remove(Group group) {
         em.remove(group);
     }
+
+    @Override
+    public List<String> getAllName() {
+        return em.createQuery("select g.name from Group g", String.class).getResultList();
+    }
 }

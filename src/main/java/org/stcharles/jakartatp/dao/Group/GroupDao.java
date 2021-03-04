@@ -12,4 +12,6 @@ public interface GroupDao {
     Group get(Integer id);
 
     void remove(Group group);
+
+    List<String> getAllName();
 }
