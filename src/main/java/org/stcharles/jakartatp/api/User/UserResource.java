@@ -5,12 +5,14 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
 import jakarta.xml.bind.ValidationException;
 import org.stcharles.jakartatp.controllers.User.UserController;
+import org.stcharles.jakartatp.qualifier.Prod;
 
 import java.util.List;
 
 @Path("/users")
 public class UserResource {
     @Inject
+    @Prod
     private UserController userController;
 
     @GET

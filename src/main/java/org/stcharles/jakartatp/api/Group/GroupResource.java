@@ -8,12 +8,20 @@ import org.stcharles.jakartatp.qualifier.Prod;
 
 import java.util.List;
 
+
 @Path("/groups")
 public class GroupResource {
     @Inject
     @Prod
     private GroupController groupController;
 
+    /**
+     * Get all group
+     * if name exist, fuzzy finding will be execute
+     *
+     * @param name
+     * @return
+     */
     @GET
     @Produces("application/json")
     public List<GroupOutput> getAll(@QueryParam("name") String name) {
@@ -23,7 +31,12 @@ public class GroupResource {
         return groupController.getAll();
     }
 
-
+    /**
+     * Get the group with the given id
+     *
+     * @param id
+     * @return
+     */
     @GET
     @Path("/{groupId}")
     @Produces("application/json")
@@ -31,7 +44,12 @@ public class GroupResource {
         return groupController.get(id);
     }
 
-
+    /**
+     * Create a group
+     *
+     * @param request
+     * @return
+     */
     @POST
     @Consumes("application/json")
     @Produces("application/json")
@@ -43,6 +61,13 @@ public class GroupResource {
                 .build();
     }
 
+    /**
+     * Update a group
+     *
+     * @param groupId
+     * @param groupInput
+     * @return
+     */
     @PUT
     @Path("/{groupId}")
     @Consumes("application/json")
@@ -54,6 +79,12 @@ public class GroupResource {
                 .build();
     }
 
+    /**
+     * Delete a group
+     *
+     * @param groupId
+     * @return
+     */
     @DELETE
     @Path("/{groupId}")
     @Consumes("application/json")

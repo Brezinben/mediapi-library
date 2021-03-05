@@ -1,7 +1,13 @@
 package org.stcharles.jakartatp.controllers.FuzzyFinding;
 
 
+import jakarta.annotation.PostConstruct;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.event.ObservesAsync;
 import jakarta.inject.Inject;
+import org.jetbrains.annotations.NotNull;
+import org.stcharles.jakartatp.Event.Album.AlbumChanged;
+import org.stcharles.jakartatp.Event.Group.GroupChanged;
 import org.stcharles.jakartatp.dao.Album.AlbumDao;
 import org.stcharles.jakartatp.dao.Group.GroupDao;
 import org.stcharles.jakartatp.model.Album;
@@ -9,14 +15,20 @@ import org.stcharles.jakartatp.model.Group;
 import org.stcharles.jakartatp.qualifier.Prod;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+
+/**
+ * The class Fuzzy finding imp implements fuzzy finding
+ */
 @Prod
+@ApplicationScoped
 public class FuzzyFindingImp implements FuzzyFinding {
-    private final Map<Integer, String> cacheAlbumTitle;
-    private final Map<Integer, String> cacheGroupName;
+    private Map<Integer, String> cacheAlbumTitle;
+    private Map<Integer, String> cacheGroupName;
 
     @Inject
     @Prod
@@ -26,11 +38,14 @@ public class FuzzyFindingImp implements FuzzyFinding {
     @Prod
     private GroupDao groupDao;
 
-    protected FuzzyFindingImp() {
-        this.cacheGroupName = groupDao.getAll().stream().collect(Collectors.toMap(Group::getId, Group::getName));
-        this.cacheAlbumTitle = albumDao.getAll().stream().collect(Collectors.toMap(Album::getId, Album::getTitle));
-    }
 
+    /**
+     * Scored match
+     *
+     * @param query     the query
+     * @param candidate the candidate
+     * @return Integer
+     */
     private static Integer scoredMatch(String query, String candidate) {
         query = query.toLowerCase();
         candidate = candidate.toLowerCase();
@@ -67,31 +82,90 @@ public class FuzzyFindingImp implements FuzzyFinding {
         return charsToBeFound.size() == 0 ? score : 0;
     }
 
-    @Override
 
+    /**
+     * Init
+     */
+    @PostConstruct
+    public void init() {
+        this.cacheGroupName = groupDao.getAll().stream().collect(Collectors.toMap(Group::getId, Group::getName));
+        this.cacheAlbumTitle = albumDao.getAll().stream().collect(Collectors.toMap(Album::getId, Album::getTitle));
+    }
+
+
+    /**
+     * Gets the album by title
+     *
+     * @param groupId the group identifier
+     * @param query   the query
+     * @return the album by title
+     * @Override
+     */
     public List<Album> getAlbumByTitle(Integer groupId, String query) {
-        return cacheAlbumTitle.entrySet()
+        return getScoredMap(this.cacheAlbumTitle, query)
+                .keySet()
                 .stream()
-                .collect(Collectors.toMap(Map.Entry::getKey, x -> String.valueOf(scoredMatch(query, x.getValue()))))
-                .entrySet()
-                .stream()
-                .filter(x -> Integer.parseInt(x.getValue()) > 0)
-                .sorted((o1, o2) -> Integer.parseInt(o1.getValue()) - Integer.parseInt(o2.getValue()))
-                .map(x -> albumDao.get(x.getKey()))
-                .filter(album -> album.getGroup().getId().equals(groupId))
+                .map(albumDao::get)
                 .collect(Collectors.toList());
     }
 
-    @Override
+
+    /**
+     * Gets the groups by name
+     *
+     * @param query the query
+     * @return the groups by name
+     * @Override
+     */
     public List<Group> getGroupsByName(String query) {
-        return cacheGroupName.entrySet()
+        return getScoredMap(this.cacheGroupName, query)
+                .keySet()
                 .stream()
-                .collect(Collectors.toMap(Map.Entry::getKey, x -> String.valueOf(scoredMatch(query, x.getValue()))))
+                .map(groupDao::get)
+                .collect(Collectors.toList());
+    }
+
+
+    /**
+     * Update groups
+     *
+     * @param GroupChanged the group changed
+     * @Override
+     */
+    public void updateGroups(@ObservesAsync GroupChanged GroupChanged) {
+        groupDao.refresh();
+        this.cacheGroupName = groupDao.getAll().stream().collect(Collectors.toMap(Group::getId, Group::getName));
+    }
+
+
+    /**
+     * Update albums
+     *
+     * @param AlbumChanged the album changed
+     * @Override
+     */
+    public void updateAlbums(@ObservesAsync AlbumChanged AlbumChanged) {
+        albumDao.refresh();
+        this.cacheAlbumTitle = albumDao.getAll().stream().collect(Collectors.toMap(Album::getId, Album::getTitle));
+    }
+
+    /**
+     * Gets the scored map
+     *
+     * @param map   the map
+     * @param query the query
+     * @return the scored map
+     */
+    @NotNull
+    private Map<Integer, Integer> getScoredMap(Map<Integer, String> map, String query) {
+        return map.entrySet()
+                .stream()
+                .collect(Collectors.toMap(Map.Entry::getKey, x -> scoredMatch(query, x.getValue())))
                 .entrySet()
                 .stream()
-                .filter(x -> Integer.parseInt(x.getValue()) > 0)
-                .sorted((o1, o2) -> Integer.parseInt(o1.getValue()) - Integer.parseInt(o2.getValue()))
-                .map(x -> groupDao.get(x.getKey()))
-                .collect(Collectors.toList());
+                .filter(x -> x.getValue() > 0)
+                .sorted(Comparator.comparingInt(Map.Entry::getValue))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+
     }
 }

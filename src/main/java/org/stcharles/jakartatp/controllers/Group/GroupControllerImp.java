@@ -1,5 +1,6 @@
 package org.stcharles.jakartatp.controllers.Group;
 
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ValidationException;
@@ -19,8 +20,12 @@ import java.util.Optional;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-@Prod
 
+/**
+ * The class Group controller imp implements group controller
+ */
+@Prod
+@ApplicationScoped
 public class GroupControllerImp implements GroupController {
     @Inject
     @Prod
@@ -40,6 +45,7 @@ public class GroupControllerImp implements GroupController {
      */
 
     public GroupOutput get(Integer id) {
+
         return Optional.ofNullable(groupDao.get(id))
                 .map(GroupOutput::new)
                 .orElseThrow(NotFoundException::new);
@@ -48,24 +54,44 @@ public class GroupControllerImp implements GroupController {
     /**
      * @param name the name to find
      * @return List<GroupOutput>
+     * @Override
      */
-    @Override
+
     public List<GroupOutput> getByName(String name) {
+
         return fuzzyFinding.getGroupsByName(name).stream().map(GroupOutput::new).collect(Collectors.toList());
     }
 
-    @Override
+
+    /**
+     * Update
+     *
+     * @param groupId   the group identifier
+     * @param name      the name
+     * @param createdAt the created at
+     * @return GroupOutput
+     * @Override
+     */
     @Transactional
     public GroupOutput update(Integer groupId, String name, LocalDate createdAt) {
+
         Group group = Optional.ofNullable(groupDao.get(groupId)).orElseThrow(NotFoundException::new);
         group.setCreated_at(createdAt);
         group.setName(name);
         return new GroupOutput(group);
     }
 
-    @Override
+
+    /**
+     * Remove
+     *
+     * @param groupId the group identifier
+     * @return Boolean
+     * @Override
+     */
     @Transactional
     public Boolean remove(Integer groupId) {
+
         Group group = Optional.ofNullable(groupDao.get(groupId)).orElseThrow(NotFoundException::new);
         if (group.getAlbums().size() > 0) {
             throw new ValidationException("Il y a des albums liée a ce groupe veillez les supprimer avant.");
@@ -85,6 +111,7 @@ public class GroupControllerImp implements GroupController {
      */
 
     public List<GroupOutput> getAll() {
+
         return groupDao.getAll()
                 .stream()
                 .map(GroupOutput::new)
@@ -101,6 +128,7 @@ public class GroupControllerImp implements GroupController {
      */
     @Transactional
     public GroupOutput create(List<AlbumInput> albums, String name, LocalDate createdAt) {
+
         Group group = new Group(name, createdAt);
         groupDao.persist(group);
         albums.forEach(album -> {

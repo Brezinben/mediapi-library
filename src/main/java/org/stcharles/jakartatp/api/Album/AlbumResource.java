@@ -8,12 +8,20 @@ import org.stcharles.jakartatp.qualifier.Prod;
 
 import java.util.List;
 
+/**
+ * The class Album resource
+ */
 @Path("/groups/{groupId}/albums")
 public class AlbumResource {
     @Inject
     @Prod
     private AlbumController albumController;
 
+    /**
+     * @param groupId
+     * @param title
+     * @return
+     */
     @GET
     @Produces("application/json")
     public List<AlbumOutput> getAll(@PathParam("groupId") Integer groupId, @QueryParam("title") String title) {
@@ -23,6 +31,11 @@ public class AlbumResource {
         return albumController.getAll(groupId);
     }
 
+    /**
+     * @param groupId
+     * @param albumId
+     * @return
+     */
     @GET
     @Path("/{albumId}")
     @Produces("application/json")
@@ -30,7 +43,11 @@ public class AlbumResource {
         return albumController.get(groupId, albumId);
     }
 
-
+    /**
+     * @param groupId
+     * @param request
+     * @return
+     */
     @POST
     @Consumes("application/json")
     @Produces("application/json")
@@ -42,6 +59,12 @@ public class AlbumResource {
                 .build();
     }
 
+    /**
+     * @param groupId
+     * @param albumId
+     * @param albumInput
+     * @return
+     */
     @PUT
     @Path("/{albumId}")
     @Consumes("application/json")
@@ -53,6 +76,11 @@ public class AlbumResource {
                 .build();
     }
 
+    /**
+     * @param groupId
+     * @param albumId
+     * @return
+     */
     @DELETE
     @Path("/{albumId}")
     @Consumes("application/json")

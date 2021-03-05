@@ -13,5 +13,5 @@ public interface GroupDao {
 
     void remove(Group group);
 
-    List<String> getAllName();
+    void refresh();
 }

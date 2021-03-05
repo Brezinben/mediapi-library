@@ -5,6 +5,9 @@ import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
 
+/**
+ * The class Loan
+ */
 @Entity
 @Table(name = "loans")
 public class Loan {
@@ -36,7 +39,15 @@ public class Loan {
     @NotNull
     private Item item;
 
+
+    /**
+     * It is a constructor.
+     *
+     * @param user the user
+     * @param item the item
+     */
     public Loan(User user, Item item) {
+
         this.dateStart = LocalDate.now();
         //La date de fin doit être inférieur a trois semaine
         this.dateEnd = dateStart.plusWeeks(3);
@@ -45,38 +56,88 @@ public class Loan {
         this.status = LoanState.EN_COURS;
     }
 
+    /**
+     * Constructor used by CDI
+     */
     protected Loan() {
     }
 
+
+    /**
+     * Gets the identifier
+     *
+     * @return the identifier
+     */
     public Integer getId() {
         return id;
     }
 
+
+    /**
+     * Gets the date start
+     *
+     * @return the date start
+     */
     public LocalDate getDateStart() {
         return dateStart;
     }
 
+
+    /**
+     * Gets the date end
+     *
+     * @return the date end
+     */
     public LocalDate getDateEnd() {
         return dateEnd;
     }
 
+
+    /**
+     * Sets the date end
+     *
+     * @param dateEnd the date end
+     */
     public void setDateEnd(LocalDate dateEnd) {
         this.dateEnd = dateEnd;
     }
 
+
+    /**
+     * Gets the status
+     *
+     * @return the status
+     */
     public LoanState getStatus() {
         return status;
     }
 
-    public Loan setStatus(LoanState status) {
+
+    /**
+     * Sets the status
+     *
+     * @param status the date end
+     */
+    public void setStatus(LoanState status) {
         this.status = status;
-        return this;
     }
 
+
+    /**
+     * Gets the user
+     *
+     * @return the user
+     */
     public User getUser() {
         return user;
     }
 
+
+    /**
+     * Gets the item
+     *
+     * @return the item
+     */
     public Item getItem() {
         return item;
     }

@@ -1,5 +1,6 @@
 package org.stcharles.jakartatp.controllers.Item;
 
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ValidationException;
@@ -18,7 +19,12 @@ import java.util.Optional;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+
+/**
+ * The class Item controller imp implements item controller
+ */
 @Prod
+@ApplicationScoped
 public class ItemControllerImp implements ItemController {
     @Inject
     @Prod
@@ -32,13 +38,30 @@ public class ItemControllerImp implements ItemController {
     @Prod
     private ItemDao itemDao;
 
+
+    /**
+     * Gets the
+     *
+     * @param id the id
+     * @return the
+     */
     @Override
     public Optional<ItemOutput> get(Integer id) {
+
         return Optional.empty();
     }
 
-    @Override
+
+    /**
+     * Gets the all
+     *
+     * @param groupId the group identifier
+     * @param albumId the album identifier
+     * @return the all
+     * @Override
+     */
     public List<ItemOutput> getAll(Integer groupId, Integer albumId) {
+
         return getWantedAlbum(groupId, albumId)
                 .getItems()
                 .stream()
@@ -46,23 +69,53 @@ public class ItemControllerImp implements ItemController {
                 .collect(Collectors.toList());
     }
 
-    @Override
+
+    /**
+     * Gets the one from album
+     *
+     * @param groupId the group identifier
+     * @param albumId the album identifier
+     * @param itemId  the item identifier
+     * @return the one from album
+     * @Override
+     */
     public ItemOutput getOneFromAlbum(Integer groupId, Integer albumId, Integer itemId) {
+
         Item item = getWantedItem(groupId, albumId, itemId);
         return new ItemOutput(item);
     }
 
-    @Override
-    //Je ne le met pas Transactional vu que createMultiple l'es.
+
+    /**
+     * Create
+     *
+     * @param itemInput the item input
+     * @param groupId   the group identifier
+     * @param albumId   the album identifier
+     * @return ItemOutput
+     * @Override
+     */
+
     public ItemOutput create(ItemInput itemInput, Integer groupId, Integer albumId) {
+
         ArrayList<ItemInput> itemIn = new ArrayList<ItemInput>();
         itemIn.add(itemInput);
         return createMultiple(itemIn, groupId, albumId).get(0);
     }
 
-    @Override
+
+    /**
+     * Create multiple
+     *
+     * @param items   the items
+     * @param groupId the group identifier
+     * @param albumId the album identifier
+     * @return List<ItemOutput>
+     * @Override
+     */
     @Transactional
     public List<ItemOutput> createMultiple(List<ItemInput> items, Integer groupId, Integer albumId) {
+
         Album album = getWantedAlbum(groupId, albumId);
 
         //Si l'on veux crée plusieurs item d'un coup
@@ -87,18 +140,40 @@ public class ItemControllerImp implements ItemController {
                 .collect(Collectors.toList());
     }
 
-    @Override
+
+    /**
+     * Update
+     *
+     * @param groupId the group identifier
+     * @param albumId the album identifier
+     * @param itemId  the item identifier
+     * @param state   the state
+     * @param type    the type
+     * @return ItemOutput
+     * @Override
+     */
     @Transactional
     public ItemOutput update(Integer groupId, Integer albumId, Integer itemId, ItemState state, ItemType type) {
+
         Item item = getWantedItem(groupId, albumId, itemId);
         item.setState(state);
         item.setType(type);
         return new ItemOutput(item);
     }
 
-    @Override
+
+    /**
+     * Remove
+     *
+     * @param groupId the group identifier
+     * @param albumId the album identifier
+     * @param itemId  the item identifier
+     * @return Boolean
+     * @Override
+     */
     @Transactional
     public Boolean remove(Integer groupId, Integer albumId, Integer itemId) {
+
         Item item = getWantedItem(groupId, albumId, itemId);
         Optional<Loan> loan = Optional.ofNullable(item.getLoan());
         if (loan.isPresent()) {
@@ -124,6 +199,7 @@ public class ItemControllerImp implements ItemController {
      * @Override
      */
     private Album getWantedAlbum(Integer groupId, Integer albumId) {
+
         Group group = Optional.ofNullable(groupDao.get(groupId)).orElseThrow(NotFoundException::new);
         List<Album> albums = Optional.ofNullable(group.getAlbums()).orElseThrow(NotFoundException::new);
         return albums.stream()
@@ -132,7 +208,17 @@ public class ItemControllerImp implements ItemController {
                 .orElseThrow(NotFoundException::new);
     }
 
+
+    /**
+     * Gets the wanted item
+     *
+     * @param groupId the group identifier
+     * @param albumId the album identifier
+     * @param itemId  the item identifier
+     * @return the wanted item
+     */
     private Item getWantedItem(Integer groupId, Integer albumId, Integer itemId) {
+
         Album album = getWantedAlbum(groupId, albumId);
         List<Item> items = Optional.ofNullable(album.getItems()).orElseThrow(NotFoundException::new);
         return items.stream()

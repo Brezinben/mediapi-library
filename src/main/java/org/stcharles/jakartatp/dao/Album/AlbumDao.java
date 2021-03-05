@@ -20,4 +20,5 @@ public interface AlbumDao {
 
     List<Album> getAll();
 
+    void refresh();
 }
