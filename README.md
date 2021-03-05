@@ -42,8 +42,7 @@ Un seul :
 ``api/groups/1``
 
 Par nom du groupe :
-
-    TODO
+``api/groups/?name=test``
 
 ### Album
 
@@ -54,8 +53,7 @@ Premier Album du groupe 1 :
 ``api/groups/1/albums/0``
 
 Par titre de l'album:
-
-    TODO
+``api/groups/:id/albums?title=test``
 
 ### Item
 

@@ -23,7 +23,6 @@ public class GroupListener {
     @PostUpdate
     void onPostUpdate(Group group) {
         groupChangedEvent.fireAsync(new GroupChanged());
-        System.out.println("J'ai actualiser les groups après update");
     }
 
     /**
@@ -34,7 +33,6 @@ public class GroupListener {
     @PostRemove
     void onPostRemove(Group group) {
         groupChangedEvent.fireAsync(new GroupChanged());
-        System.out.println("J'ai actualiser les groups après suppression");
     }
 
 }
