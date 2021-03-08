@@ -5,12 +5,8 @@ import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ValidationException;
 import jakarta.ws.rs.NotFoundException;
-import org.stcharles.jakartatp.api.Album.AlbumInput;
-import org.stcharles.jakartatp.api.Group.GroupOutput;
 import org.stcharles.jakartatp.controllers.FuzzyFinding.FuzzyFinding;
-import org.stcharles.jakartatp.dao.Album.AlbumDao;
 import org.stcharles.jakartatp.dao.Group.GroupDao;
-import org.stcharles.jakartatp.model.Album;
 import org.stcharles.jakartatp.model.Group;
 import org.stcharles.jakartatp.qualifier.Prod;
 
@@ -18,7 +14,6 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 
 /**
@@ -30,9 +25,6 @@ public class GroupControllerImp implements GroupController {
     @Inject
     @Prod
     private GroupDao groupDao;
-    @Inject
-    @Prod
-    private AlbumDao albumDao;
 
     @Inject
     @Prod
@@ -40,26 +32,23 @@ public class GroupControllerImp implements GroupController {
 
     /**
      * @param id the id
-     * @return GroupOutput
+     * @return Group
      * @Override Gets the
      */
 
-    public GroupOutput get(Integer id) {
-
-        return Optional.ofNullable(groupDao.get(id))
-                .map(GroupOutput::new)
-                .orElseThrow(NotFoundException::new);
+    public Group get(Integer id) {
+        return Optional.ofNullable(groupDao.get(id)).orElseThrow(NotFoundException::new);
     }
 
     /**
      * @param name the name to find
-     * @return List<GroupOutput>
+     * @return List<Group>
      * @Override
      */
 
-    public List<GroupOutput> getByName(String name) {
+    public List<Group> getByName(String name) {
 
-        return fuzzyFinding.getGroupsByName(name).stream().map(GroupOutput::new).collect(Collectors.toList());
+        return fuzzyFinding.getGroupsByName(name);
     }
 
 
@@ -69,16 +58,16 @@ public class GroupControllerImp implements GroupController {
      * @param groupId   the group identifier
      * @param name      the name
      * @param createdAt the created at
-     * @return GroupOutput
+     * @return Group
      * @Override
      */
     @Transactional
-    public GroupOutput update(Integer groupId, String name, LocalDate createdAt) {
+    public Group update(Integer groupId, String name, LocalDate createdAt) {
 
         Group group = Optional.ofNullable(groupDao.get(groupId)).orElseThrow(NotFoundException::new);
         group.setCreated_at(createdAt);
         group.setName(name);
-        return new GroupOutput(group);
+        return group;
     }
 
 
@@ -106,36 +95,28 @@ public class GroupControllerImp implements GroupController {
     }
 
     /**
-     * @return List<GroupOutput>
+     * @return List<Group>
      * @Override Gets the all
      */
 
-    public List<GroupOutput> getAll() {
-
-        return groupDao.getAll()
-                .stream()
-                .map(GroupOutput::new)
-                .collect(Collectors.toList());
+    public List<Group> getAll() {
+        return groupDao.getAll();
     }
 
 
     /**
-     * @param albums    the albums
      * @param name      the name
      * @param createdAt the created_at
      * @return Group
      * @Override Create
      */
     @Transactional
-    public GroupOutput create(List<AlbumInput> albums, String name, LocalDate createdAt) {
+    public Group create(String name, LocalDate createdAt) {
 
         Group group = new Group(name, createdAt);
+        //On pourrait faire une vérification avec un equal sur la date et le nom
         groupDao.persist(group);
-        albums.forEach(album -> {
-            Album a = new Album(group, album.title, album.release, null);
-            albumDao.persist(a);
-        });
-        return new GroupOutput(group);
+        return group;
     }
 
 }

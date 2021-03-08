@@ -12,6 +12,7 @@ public class LoanOutput {
     public LocalDate dateEnd;
     public Integer itemId;
     public LoanState status;
+    public Integer id;
 
     /**
      * @param loan
@@ -21,5 +22,6 @@ public class LoanOutput {
         this.dateEnd = loan.getDateEnd();
         this.itemId = loan.getItem().getId();
         this.status = loan.getStatus();
+        this.id = loan.getId();
     }
 }

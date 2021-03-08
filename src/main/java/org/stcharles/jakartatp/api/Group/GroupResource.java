@@ -4,9 +4,11 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
 import org.stcharles.jakartatp.controllers.Group.GroupController;
+import org.stcharles.jakartatp.model.Group;
 import org.stcharles.jakartatp.qualifier.Prod;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Path("/groups")
@@ -26,9 +28,15 @@ public class GroupResource {
     @Produces("application/json")
     public List<GroupOutput> getAll(@QueryParam("name") String name) {
         if (name != null) {
-            return groupController.getByName(name);
+            return groupController.getByName(name)
+                    .stream()
+                    .map(GroupOutput::new)
+                    .collect(Collectors.toList());
         }
-        return groupController.getAll();
+        return groupController.getAll()
+                .stream()
+                .map(GroupOutput::new)
+                .collect(Collectors.toList());
     }
 
     /**
@@ -41,7 +49,8 @@ public class GroupResource {
     @Path("/{groupId}")
     @Produces("application/json")
     public GroupOutput get(@PathParam("groupId") Integer id) {
-        return groupController.get(id);
+        Group group = groupController.get(id);
+        return new GroupOutput(group);
     }
 
     /**
@@ -54,10 +63,9 @@ public class GroupResource {
     @Consumes("application/json")
     @Produces("application/json")
     public Response create(GroupInput request) {
-        GroupOutput group = groupController.create(request.albums, request.name, request.createdAt);
-        return Response
-                .status(Response.Status.CREATED)
-                .entity(group)
+        Group group = groupController.create(request.name, request.createdAt);
+        return Response.status(Response.Status.CREATED)
+                .entity(new GroupOutput(group))
                 .build();
     }
 
@@ -72,10 +80,11 @@ public class GroupResource {
     @Path("/{groupId}")
     @Consumes("application/json")
     public Response update(@PathParam("groupId") Integer groupId, ChangeGroupInput groupInput) {
-        GroupOutput group = groupController.update(groupId, groupInput.name, groupInput.createdAt);
-        return Response
-                .status(Response.Status.OK)
-                .entity(group)
+
+        Group group = groupController.update(groupId, groupInput.name, groupInput.createdAt);
+
+        return Response.status(Response.Status.OK)
+                .entity(new GroupOutput(group))
                 .build();
     }
 
@@ -90,7 +99,9 @@ public class GroupResource {
     @Consumes("application/json")
     public Response remove(@PathParam("groupId") Integer groupId) {
         Boolean deleted = groupController.remove(groupId);
+
         Response.Status code = deleted ? Response.Status.NO_CONTENT : Response.Status.BAD_REQUEST;
+
         return Response.status(code).build();
     }
 }

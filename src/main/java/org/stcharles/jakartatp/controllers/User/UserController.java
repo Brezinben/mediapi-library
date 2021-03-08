@@ -1,23 +1,21 @@
 package org.stcharles.jakartatp.controllers.User;
 
 import jakarta.xml.bind.ValidationException;
-import org.stcharles.jakartatp.api.User.UserOutput;
+import org.stcharles.jakartatp.model.User;
 
 import java.util.List;
 
 public interface UserController {
 
-    UserOutput create(String firstName, String lastName, String email) throws ValidationException;
+    User create(String firstName, String lastName, String email) throws ValidationException;
 
-    List<UserOutput> getAll();
+    List<User> getAll();
 
-    UserOutput get(Integer id);
+    User get(Integer id);
 
-    Boolean delete(Integer userId);
+    User getByEmail(String email);
 
-    List<UserOutput> getByEmail(String email);
-
-    UserOutput update(Integer id, String firstName, String lastName, String email);
+    User update(Integer id, String firstName, String lastName, String email);
 
     Boolean remove(Integer userId);
 }

@@ -1,28 +1,26 @@
 package org.stcharles.jakartatp.controllers.Item;
 
-import org.stcharles.jakartatp.api.Item.ItemInput;
-import org.stcharles.jakartatp.api.Item.ItemOutput;
+import org.stcharles.jakartatp.model.Item;
 import org.stcharles.jakartatp.model.ItemState;
 import org.stcharles.jakartatp.model.ItemType;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  *
  */
 public interface ItemController {
-    Optional<ItemOutput> get(Integer id);
+    Item get(Integer groupId, Integer albumId, Integer itemId);
 
-    List<ItemOutput> getAll(Integer groupId, Integer albumId);
+    Item get(Integer itemId);
 
-    ItemOutput getOneFromAlbum(Integer groupId, Integer albumId, Integer itemId);
+    List<Item> getAll(Integer groupId, Integer albumId);
 
-    List<ItemOutput> createMultiple(List<ItemInput> request, Integer groupId, Integer albumId);
+    List<Item> createMultiple(List<Item> items, Integer groupId, Integer albumId);
 
-    ItemOutput create(ItemInput request, Integer groupId, Integer albumId);
+    Item create(Item request, Integer groupId, Integer albumId);
 
-    ItemOutput update(Integer groupId, Integer albumId, Integer itemId, ItemState state, ItemType type);
+    Item update(Integer groupId, Integer albumId, Integer itemId, ItemState state, ItemType type);
 
     Boolean remove(Integer groupId, Integer albumId, Integer itemId);
 }

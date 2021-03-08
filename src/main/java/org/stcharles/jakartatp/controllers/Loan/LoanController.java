@@ -1,25 +1,24 @@
 package org.stcharles.jakartatp.controllers.Loan;
 
-import org.stcharles.jakartatp.api.Loan.LoanInput;
-import org.stcharles.jakartatp.api.Loan.LoanOutput;
+import org.stcharles.jakartatp.model.Loan;
 import org.stcharles.jakartatp.model.LoanState;
 
 import java.util.List;
 
 public interface LoanController {
-    List<LoanOutput> getAll(Integer userId);
+    List<Loan> getAll(Integer userId);
 
-    LoanOutput get(Integer userId, Integer loanId);
+    Loan get(Integer userId, Integer loanId);
 
-    LoanOutput changeStatus(Integer userId, Integer loanId, LoanState status);
+    Loan changeStatus(Integer userId, Integer loanId, LoanState status);
 
-    LoanOutput create(Integer userId, LoanInput loanInput);
+    Loan create(Integer userId, Loan loan);
 
-    List<LoanOutput> createMultiple(Integer userId, List<LoanInput> loanInputs);
+    List<Loan> createMultiple(Integer userId, List<Loan> loans);
 
-    List<LoanOutput> getByStatus(Integer userId, LoanState status);
+    List<Loan> getByStatus(Integer userId, LoanState status);
 
-    LoanOutput update(Integer userId, Integer loanId, LoanState state);
+    Loan update(Integer userId, Integer loanId, LoanState state);
 
     Boolean remove(Integer userId, Integer loanId);
 }

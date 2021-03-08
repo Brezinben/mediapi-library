@@ -33,33 +33,7 @@ Accept: application/json
 
 {
   "createdAt": "2020-02-27",
-  "name": "Three Days Grace",
-  "albums": [
-    {
-      "title": "Three Days Grace",
-      "release": "2003-02-27"
-    },
-    {
-      "title": "One-X",
-      "release": "2006-02-27"
-    },
-    {
-      "title": "Life Starts Now",
-      "release": "2009-02-27"
-    },
-    {
-      "title": "Transit Of Venus",
-      "release": "2012-02-27"
-    },
-    {
-      "title": "Human",
-      "release": "2015-02-27"
-    },
-    {
-      "title": "Outsider",
-      "release": "2018-02-27"
-    }
-  ]
+  "name": "Three Days Grace"
 }
 
 ### Création multiple d'item

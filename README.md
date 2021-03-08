@@ -119,17 +119,7 @@ Sur ``api/groups``
 ```json
 {
   "createdAt": "2020-02-27",
-  "name": "Manafest",
-  "albums": [
-    {
-      "title": "Mon Super Album",
-      "release": "2020-02-27"
-    },
-    {
-      "title": "Mon Deuxième Album",
-      "release": "2020-02-28"
-    }
-  ]
+  "name": "Manafest"
 }
 ```
 

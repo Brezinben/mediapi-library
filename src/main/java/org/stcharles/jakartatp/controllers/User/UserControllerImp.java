@@ -5,17 +5,14 @@ import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ValidationException;
 import jakarta.ws.rs.NotFoundException;
-import org.stcharles.jakartatp.api.User.UserOutput;
 import org.stcharles.jakartatp.dao.User.UserDao;
 import org.stcharles.jakartatp.model.LoanState;
 import org.stcharles.jakartatp.model.User;
 import org.stcharles.jakartatp.qualifier.Prod;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 /**
  * The class User controller imp implements user controller
@@ -26,6 +23,42 @@ public class UserControllerImp implements UserController {
     @Inject
     @Prod
     private UserDao userDao;
+
+
+    /**
+     * Gets the all
+     *
+     * @return the all
+     * @Override
+     */
+    public List<User> getAll() {
+        return userDao.getAll();
+    }
+
+
+    /**
+     * Gets the
+     *
+     * @param id the id
+     * @return the
+     * @Override
+     */
+    public User get(Integer id) {
+        return Optional.ofNullable(userDao.get(id)).orElseThrow(NotFoundException::new);
+    }
+
+
+    /**
+     * Gets the by email
+     *
+     * @param email the email
+     * @return the by email
+     * @Override
+     */
+    public User getByEmail(String email) {
+
+        return Optional.ofNullable(userDao.getByEmail(email)).orElseThrow(NotFoundException::new);
+    }
 
     /**
      * Create
@@ -38,7 +71,7 @@ public class UserControllerImp implements UserController {
      * @Override
      */
     @Transactional
-    public UserOutput create(String firstName, String lastName, String email) throws ValidationException {
+    public User create(String firstName, String lastName, String email) throws ValidationException {
 
         Optional<User> validEmail = Optional.ofNullable(userDao.getByEmail(email));
         if (validEmail.isPresent()) {
@@ -46,69 +79,8 @@ public class UserControllerImp implements UserController {
         }
         User user = new User(firstName, lastName, email);
         userDao.persist(user);
-        return new UserOutput(user);
+        return user;
     }
-
-
-    /**
-     * Gets the all
-     *
-     * @return the all
-     * @Override
-     */
-    public List<UserOutput> getAll() {
-
-        return userDao.getAll()
-                .stream()
-                .map(UserOutput::new)
-                .collect(Collectors.toList());
-    }
-
-
-    /**
-     * Gets the
-     *
-     * @param id the id
-     * @return the
-     * @Override
-     */
-    public UserOutput get(Integer id) {
-
-        return Optional.ofNullable(userDao.get(id))
-                .map(UserOutput::new)
-                .orElseThrow(NotFoundException::new);
-    }
-
-
-    /**
-     * Delete
-     *
-     * @param userId the user identifier
-     * @return Boolean
-     * @Override
-     */
-    @Transactional
-    public Boolean delete(Integer userId) {
-
-        return null;
-    }
-
-
-    /**
-     * Gets the by email
-     *
-     * @param email the email
-     * @return the by email
-     * @Override
-     */
-    public List<UserOutput> getByEmail(String email) {
-
-        User user = Optional.ofNullable(userDao.getByEmail(email)).orElseThrow(NotFoundException::new);
-        List<UserOutput> list = new ArrayList();
-        list.add(new UserOutput(user));
-        return list;
-    }
-
 
     /**
      * Update
@@ -122,7 +94,7 @@ public class UserControllerImp implements UserController {
      */
 
     @Transactional
-    public UserOutput update(Integer id, String firstName, String lastName, String email) {
+    public User update(Integer id, String firstName, String lastName, String email) {
 
         User user = Optional.ofNullable(userDao.get(id)).orElseThrow(NotFoundException::new);
         user.setFirstName(firstName);
@@ -132,7 +104,7 @@ public class UserControllerImp implements UserController {
             throw new ValidationException("L'email ne peut pas être enregistrer car il existe déjà dans notre base");
         }
         user.setEmail(email);
-        return new UserOutput(user);
+        return user;
     }
 
 

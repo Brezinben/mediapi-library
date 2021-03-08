@@ -5,11 +5,9 @@ import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ValidationException;
 import jakarta.ws.rs.NotFoundException;
-import org.stcharles.jakartatp.api.Loan.LoanInput;
-import org.stcharles.jakartatp.api.Loan.LoanOutput;
+import org.stcharles.jakartatp.controllers.User.UserController;
 import org.stcharles.jakartatp.dao.Item.ItemDao;
 import org.stcharles.jakartatp.dao.Loan.LoanDao;
-import org.stcharles.jakartatp.dao.User.UserDao;
 import org.stcharles.jakartatp.model.*;
 import org.stcharles.jakartatp.qualifier.Prod;
 
@@ -34,7 +32,7 @@ public class LoanControllerImp implements LoanController {
 
     @Inject
     @Prod
-    private UserDao userDao;
+    private UserController userController;
 
     @Inject
     @Prod
@@ -66,28 +64,29 @@ public class LoanControllerImp implements LoanController {
      * @return the all
      * @Override
      */
-    public List<LoanOutput> getAll(Integer userId) {
+    public List<Loan> getAll(Integer userId) {
 
-        User user = getWantedUser(userId);
-        return loanDao.getLoans(user)
-                .stream()
-                .map(LoanOutput::new)
-                .collect(Collectors.toList());
+        User user = userController.get(userId);
+        return loanDao.getLoans(user);
     }
 
 
     /**
-     * Gets the
+     * Gets the wanted loan
      *
      * @param userId the user identifier
      * @param loanId the loan identifier
-     * @return the
+     * @return the wanted loan
      * @Override
      */
-    public LoanOutput get(Integer userId, Integer loanId) {
+    public Loan get(Integer userId, Integer loanId) {
 
-        Loan loan = getWantedLoan(userId, loanId);
-        return new LoanOutput(loan);
+        User user = userController.get(userId);
+        List<Loan> loans = Optional.ofNullable(user.getLoans()).orElseThrow(NotFoundException::new);
+        return loans.stream()
+                .filter(loan -> loan.getId().equals(loanId))
+                .findFirst()
+                .orElseThrow(NotFoundException::new);
     }
 
 
@@ -100,26 +99,26 @@ public class LoanControllerImp implements LoanController {
      * @return LoanOutput
      * @Override
      */
-    public LoanOutput changeStatus(Integer userId, Integer loanId, LoanState status) {
+    public Loan changeStatus(Integer userId, Integer loanId, LoanState status) {
 
-        Loan loan = getWantedLoan(userId, loanId);
+        Loan loan = this.get(userId, loanId);
         loan.setStatus(status);
-        return new LoanOutput(loan);
+        return loan;
     }
 
 
     /**
      * Create
      *
-     * @param userId    the user identifier
-     * @param loanInput the loan input
+     * @param userId the user identifier
+     * @param loan   the loan input
      * @return LoanOutput
      * @Override
      */
-    public LoanOutput create(Integer userId, LoanInput loanInput) {
+    public Loan create(Integer userId, Loan loan) {
 
-        ArrayList<LoanInput> list = new ArrayList<>();
-        list.add(loanInput);
+        ArrayList<Loan> list = new ArrayList<>();
+        list.add(loan);
         return createMultiple(userId, list).get(0);
     }
 
@@ -133,18 +132,15 @@ public class LoanControllerImp implements LoanController {
      * @Override
      */
     @Transactional
-    public List<LoanOutput> createMultiple(Integer userId, List<LoanInput> loans) {
+    public List<Loan> createMultiple(Integer userId, List<Loan> loans) {
 
         int maxSize = 5;
         if (loans.size() > maxSize) {
             throw new ValidationException("Vous ne pouvez pas déclarer plus de " + maxSize + " enregistrements ici vous en avez " + loans.size());
         }
-        User user = getWantedUser(userId);
-
-        //On les transforment en Loan
+        //On filtre les id enlever les doublons
         List<Loan> loanList = loans.stream()
-                .filter(distinctByItemId(loan -> loan.itemId))
-                .map(loanInput -> new Loan(user, getWantedItem(loanInput.itemId)))
+                .filter(distinctByItemId(loan -> loan.getItem().getId()))
                 .collect(Collectors.toList());
 
         //On les persistent si l'item est valide
@@ -155,9 +151,7 @@ public class LoanControllerImp implements LoanController {
                     loan.getItem().setLoan(loan);
                 }
         );
-        return loanList.stream()
-                .map(LoanOutput::new)
-                .collect(Collectors.toList());
+        return loanList;
     }
 
 
@@ -169,12 +163,11 @@ public class LoanControllerImp implements LoanController {
      * @return the by status
      * @Override
      */
-    public List<LoanOutput> getByStatus(Integer userId, LoanState status) {
+    public List<Loan> getByStatus(Integer userId, LoanState status) {
 
-        return loanDao.getLoans(getWantedUser(userId))
+        return loanDao.getLoans(userController.get(userId))
                 .stream()
                 .filter(loan -> loan.getStatus() == status)
-                .map(LoanOutput::new)
                 .collect(Collectors.toList());
     }
 
@@ -185,13 +178,13 @@ public class LoanControllerImp implements LoanController {
      * @param userId the user identifier
      * @param loanId the loan identifier
      * @param state  the state
-     * @return LoanOutput
+     * @return Loan
      * @Override
      */
     @Transactional
-    public LoanOutput update(Integer userId, Integer loanId, LoanState state) {
+    public Loan update(Integer userId, Integer loanId, LoanState state) {
 
-        Loan loan = getWantedLoan(userId, loanId);
+        Loan loan = this.get(userId, loanId);
         if (loan.getStatus() == LoanState.RENDU) {
             throw new ValidationException("Cette emprunt est déjà rendu !");
         }
@@ -202,9 +195,8 @@ public class LoanControllerImp implements LoanController {
         } else if (state == LoanState.EN_RETARD) {
             loan.setStatus(state);
         }
-        return new LoanOutput(loan);
+        return loan;
     }
-
 
     /**
      * Remove
@@ -217,7 +209,7 @@ public class LoanControllerImp implements LoanController {
     @Transactional
     public Boolean remove(Integer userId, Integer loanId) {
 
-        Loan loan = getWantedLoan(userId, loanId);
+        Loan loan = this.get(userId, loanId);
         if (loan.getStatus().equals(LoanState.EN_COURS)) {
             throw new ValidationException("Cette emprunt est actuellement utilisé, on ne peux donc le supprimer");
         }
@@ -229,50 +221,6 @@ public class LoanControllerImp implements LoanController {
             return false;
         }
     }
-
-
-    /**
-     * Gets the wanted item
-     *
-     * @param itemId the item identifier
-     * @return the wanted item
-     */
-    private Item getWantedItem(Integer itemId) {
-
-        return Optional.ofNullable(itemDao.get(itemId)).orElseThrow(NotFoundException::new);
-
-    }
-
-
-    /**
-     * Gets the wanted user
-     *
-     * @param id the id
-     * @return the wanted user
-     */
-    private User getWantedUser(Integer id) {
-
-        return Optional.ofNullable(userDao.get(id)).orElseThrow(NotFoundException::new);
-    }
-
-
-    /**
-     * Gets the wanted loan
-     *
-     * @param userId the user identifier
-     * @param loanId the loan identifier
-     * @return the wanted loan
-     */
-    private Loan getWantedLoan(Integer userId, Integer loanId) {
-
-        User user = getWantedUser(userId);
-        List<Loan> loans = Optional.ofNullable(user.getLoans()).orElseThrow(NotFoundException::new);
-        return loans.stream()
-                .filter(loan -> loan.getId().equals(loanId))
-                .findFirst()
-                .orElseThrow(NotFoundException::new);
-    }
-
 
     /**
      * Item validation
