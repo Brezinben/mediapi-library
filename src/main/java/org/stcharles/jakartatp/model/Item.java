@@ -32,6 +32,7 @@ public class Item {
     @JoinColumn(name = "album_id")
     @NotNull
     private Album album;
+
     @OneToOne(targetEntity = Loan.class)
     @JoinColumn(name = "active_loan_id", unique = true)
     private Loan loan;

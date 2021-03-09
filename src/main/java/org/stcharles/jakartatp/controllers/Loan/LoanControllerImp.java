@@ -128,7 +128,7 @@ public class LoanControllerImp implements LoanController {
      *
      * @param userId the user identifier
      * @param loans  the loans
-     * @return List<LoanOutput>
+     * @return List<Loan>
      * @Override
      */
     @Transactional
@@ -138,20 +138,14 @@ public class LoanControllerImp implements LoanController {
         if (loans.size() > maxSize) {
             throw new ValidationException("Vous ne pouvez pas déclarer plus de " + maxSize + " enregistrements ici vous en avez " + loans.size());
         }
-        //On filtre les id enlever les doublons
-        List<Loan> loanList = loans.stream()
+        //On filtre les items id pour  enlever les doublons
+        loans = loans.stream()
                 .filter(distinctByItemId(loan -> loan.getItem().getId()))
                 .collect(Collectors.toList());
 
-        //On les persistent si l'item est valide
-        loanList.forEach(loan -> {
-                    itemValidation(loan.getItem());
-                    loanDao.persist(loan);
-                    //On set notre id dans loan pour la relation entre les deux
-                    loan.getItem().setLoan(loan);
-                }
-        );
-        return loanList;
+        loans.forEach(this::checkAndPersist);
+
+        return loans;
     }
 
 
@@ -228,7 +222,6 @@ public class LoanControllerImp implements LoanController {
      * @param item the item
      */
     private void itemValidation(Item item) {
-
         //Si il est deja a quelqu'un
         Optional<Loan> loan = Optional.ofNullable(item.getLoan());
         if (loan.isPresent()) {
@@ -238,5 +231,14 @@ public class LoanControllerImp implements LoanController {
         if (item.getState() == ItemState.INUTILISABLE) {
             throw new ValidationException("Vous ne pouvez pas prendre un item (id :" + item.getId() + ") non utilisable");
         }
+    }
+
+    @Transactional
+    private void checkAndPersist(Loan loan) {
+        itemValidation(loan.getItem());
+        loanDao.persist(loan);
+        //On set notre id dans loan pour la relation entre les deux
+        Item item = loan.getItem();
+        item.setLoan(loan);
     }
 }
