@@ -12,9 +12,9 @@ public interface LoanController {
 
     Loan changeStatus(Integer userId, Integer loanId, LoanState status);
 
-    Loan create(Integer userId, Loan loan);
+    Loan create(Integer userId, Integer itemId);
 
-    List<Loan> createMultiple(Integer userId, List<Loan> loans);
+    List<Loan> createMultiple(Integer userId, List<Integer> loans);
 
     List<Loan> getByStatus(Integer userId, LoanState status);
 

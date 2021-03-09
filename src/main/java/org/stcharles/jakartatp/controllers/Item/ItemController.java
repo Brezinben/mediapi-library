@@ -16,9 +16,9 @@ public interface ItemController {
 
     List<Item> getAll(Integer groupId, Integer albumId);
 
-    List<Item> createMultiple(List<Item> items, Integer groupId, Integer albumId);
+    List<Item> createMultiple(List<String[]> itemsValues, Integer groupId, Integer albumId);
 
-    Item create(Item request, Integer groupId, Integer albumId);
+    Item create(String[] itemValue, Integer groupId, Integer albumId);
 
     Item update(Integer groupId, Integer albumId, Integer itemId, ItemState state, ItemType type);
 

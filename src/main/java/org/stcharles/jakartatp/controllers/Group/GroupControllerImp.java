@@ -113,10 +113,17 @@ public class GroupControllerImp implements GroupController {
     @Transactional
     public Group create(String name, LocalDate createdAt) {
 
-        Group group = new Group(name, createdAt);
+        Group newGroup = new Group(name, createdAt);
         //On pourrait faire une vérification avec un equal sur la date et le nom
-        groupDao.persist(group);
-        return group;
+        Optional<List<Group>> groups = Optional.ofNullable(getByName(name));
+        if (groups.isPresent()) {
+            boolean alreadyExist = groups.get().stream().anyMatch(group -> group.getCreated_at().equals(createdAt));
+            if (alreadyExist) {
+                throw new ValidationException("Le groupe existe déjà");
+            }
+        }
+        groupDao.persist(newGroup);
+        return newGroup;
     }
 
 }

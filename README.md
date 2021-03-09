@@ -122,7 +122,7 @@ Sur ``api/groups``
   "name": "Manafest"
 }
 ```
-
+Si un groupe a le même nom et la même date alors on ne le crée pas.
 ### Album
 
 Sur ``api/groups/:id/albums``

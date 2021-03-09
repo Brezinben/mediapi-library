@@ -18,7 +18,7 @@ public class Group {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @OneToMany(targetEntity = Album.class)
+    @OneToMany(targetEntity = Album.class, fetch = FetchType.EAGER)
     @JoinColumn(name = "group_id", referencedColumnName = "id")
     @OrderBy(value = "release")
     private List<Album> albums = new ArrayList<>();

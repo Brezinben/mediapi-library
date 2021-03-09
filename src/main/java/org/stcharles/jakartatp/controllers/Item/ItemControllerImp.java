@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 
 /**
@@ -68,7 +69,7 @@ public class ItemControllerImp implements ItemController {
      *
      * @param groupId the group identifier
      * @param albumId the album identifier
-     * @return the all
+     * @return all items
      * @Override
      */
     public List<Item> getAll(Integer groupId, Integer albumId) {
@@ -79,17 +80,17 @@ public class ItemControllerImp implements ItemController {
     /**
      * Create
      *
-     * @param itemToCreate the item input
-     * @param groupId      the group identifier
-     * @param albumId      the album identifier
-     * @return ItemOutput
+     * @param itemValue the item input
+     * @param groupId   the group identifier
+     * @param albumId   the album identifier
+     * @return Item
      * @Override
      */
 
-    public Item create(Item itemToCreate, Integer groupId, Integer albumId) {
+    public Item create(String[] itemValue, Integer groupId, Integer albumId) {
 
-        ArrayList<Item> item = new ArrayList<Item>();
-        item.add(itemToCreate);
+        ArrayList<String[]> item = new ArrayList<>();
+        item.add(itemValue);
         return createMultiple(item, groupId, albumId).get(0);
     }
 
@@ -100,13 +101,17 @@ public class ItemControllerImp implements ItemController {
      * @param items   the items
      * @param groupId the group identifier
      * @param albumId the album identifier
-     * @return List<ItemOutput>
+     * @return List<Item>
      * @Override
      */
     @Transactional
-    public List<Item> createMultiple(List<Item> items, Integer groupId, Integer albumId) {
-        items.forEach(itemDao::persist);
-        return items;
+    public List<Item> createMultiple(List<String[]> items, Integer groupId, Integer albumId) {
+        Album album = albumController.get(groupId, albumId);
+        List<Item> toPersist = items.stream()
+                .map(item -> new Item(ItemState.valueOf(item[0]), ItemType.valueOf(item[1]), album))
+                .collect(Collectors.toList());
+        toPersist.forEach(itemDao::persist);
+        return toPersist;
     }
 
 
@@ -118,7 +123,7 @@ public class ItemControllerImp implements ItemController {
      * @param itemId  the item identifier
      * @param state   the state
      * @param type    the type
-     * @return ItemOutput
+     * @return Item
      * @Override
      */
     @Transactional

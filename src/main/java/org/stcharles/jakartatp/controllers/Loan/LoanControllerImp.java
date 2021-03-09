@@ -5,6 +5,7 @@ import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ValidationException;
 import jakarta.ws.rs.NotFoundException;
+import org.stcharles.jakartatp.controllers.Item.ItemController;
 import org.stcharles.jakartatp.controllers.User.UserController;
 import org.stcharles.jakartatp.dao.Item.ItemDao;
 import org.stcharles.jakartatp.dao.Loan.LoanDao;
@@ -22,17 +23,21 @@ import java.util.function.Predicate;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-@Prod
-@ApplicationScoped
 
 /**
  * The class Loan controller imp implements loan controller
  */
+@Prod
+@ApplicationScoped
 public class LoanControllerImp implements LoanController {
 
     @Inject
     @Prod
     private UserController userController;
+
+    @Inject
+    @Prod
+    private ItemController itemController;
 
     @Inject
     @Prod
@@ -111,14 +116,14 @@ public class LoanControllerImp implements LoanController {
      * Create
      *
      * @param userId the user identifier
-     * @param loan   the loan input
-     * @return LoanOutput
+     * @param itemId the item identifier
+     * @return Loan
      * @Override
      */
-    public Loan create(Integer userId, Loan loan) {
+    public Loan create(Integer userId, Integer itemId) {
 
-        ArrayList<Loan> list = new ArrayList<>();
-        list.add(loan);
+        List<Integer> list = new ArrayList<>();
+        list.add(itemId);
         return createMultiple(userId, list).get(0);
     }
 
@@ -126,21 +131,23 @@ public class LoanControllerImp implements LoanController {
     /**
      * Create multiple
      *
-     * @param userId the user identifier
-     * @param loans  the loans
+     * @param userId  the user identifier
+     * @param itemsId the loans
      * @return List<Loan>
      * @Override
      */
     @Transactional
-    public List<Loan> createMultiple(Integer userId, List<Loan> loans) {
+    public List<Loan> createMultiple(Integer userId, List<Integer> itemsId) {
 
         int maxSize = 5;
-        if (loans.size() > maxSize) {
-            throw new ValidationException("Vous ne pouvez pas déclarer plus de " + maxSize + " enregistrements ici vous en avez " + loans.size());
+        if (itemsId.size() > maxSize) {
+            throw new ValidationException("Vous ne pouvez pas déclarer plus de " + maxSize + " enregistrements ici vous en avez " + itemsId.size());
         }
+        User user = userController.get(userId);
         //On filtre les items id pour  enlever les doublons
-        loans = loans.stream()
-                .filter(distinctByItemId(loan -> loan.getItem().getId()))
+        List<Loan> loans = itemsId.stream()
+                .filter(distinctByItemId(id -> id))
+                .map(id -> new Loan(user, itemController.get(id)))
                 .collect(Collectors.toList());
 
         loans.forEach(this::checkAndPersist);
@@ -233,7 +240,7 @@ public class LoanControllerImp implements LoanController {
         }
     }
 
-    @Transactional
+
     private void checkAndPersist(Loan loan) {
         itemValidation(loan.getItem());
         loanDao.persist(loan);

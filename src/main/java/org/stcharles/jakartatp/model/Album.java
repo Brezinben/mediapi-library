@@ -28,7 +28,7 @@ public class Album {
     @Column(name = "release")
     private LocalDate release;
 
-    @OneToMany(targetEntity = Item.class)
+    @OneToMany(targetEntity = Item.class, fetch = FetchType.EAGER)
     @JoinColumn(name = "album_id", nullable = false)
     @OrderBy(value = "cratedAt")
     private List<Item> items;
@@ -125,12 +125,4 @@ public class Album {
     }
 
 
-    /**
-     * Sets the items
-     *
-     * @param items the items
-     */
-    public void setItems(List<Item> items) {
-        this.items = items;
-    }
 }

@@ -9,14 +9,14 @@ public interface AlbumController {
 
     /**
      * @param id the id
-     * @return List<AlbumOutput>
+     * @return List<Album>
      */
     List<Album> getAll(Integer id);
 
     /**
      * @param groupId the group identifier
      * @param albumId the album identifier
-     * @return AlbumOutput
+     * @return Album
      */
     Album get(Integer groupId, Integer albumId);
 
@@ -24,7 +24,7 @@ public interface AlbumController {
     /**
      * @param groupId
      * @param title   of album to find
-     * @return List<AlbumOutput>
+     * @return List<Album>
      */
     List<Album> getByTitle(Integer groupId, String title);
 

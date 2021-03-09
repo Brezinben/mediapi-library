@@ -3,9 +3,7 @@ package org.stcharles.jakartatp.api.Item;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
-import org.stcharles.jakartatp.controllers.Album.AlbumController;
 import org.stcharles.jakartatp.controllers.Item.ItemController;
-import org.stcharles.jakartatp.model.Album;
 import org.stcharles.jakartatp.model.Item;
 import org.stcharles.jakartatp.qualifier.Prod;
 
@@ -18,10 +16,6 @@ public class ItemResource {
     @Inject
     @Prod
     private ItemController itemController;
-
-    @Inject
-    @Prod
-    private AlbumController albumController;
 
     @GET
     @Produces("application/json")
@@ -44,28 +38,27 @@ public class ItemResource {
     @Consumes("application/json")
     @Produces("application/json")
     public Response createMultiple(@PathParam("groupId") Integer groupId, @PathParam("albumId") Integer albumId, List<ItemInput> itemInputList) {
-        //Je trouve ça bizarre que l'on doit le faire ici mais bon...
 
         //Si l'on veux crée plusieurs item d'un coup
-        List<ItemInput> toPersist = new ArrayList<>();
-
+        List<ItemInput> multiplyItemInput = new ArrayList<>();
+        Integer toAdd;
         for (ItemInput itemInput : itemInputList) {
-            Integer toAdd = itemInput.nombre;
+            toAdd = itemInput.nombre;
             if (toAdd < 0) continue;
             for (int j = 0; j < toAdd; j++) {
-                toPersist.add(itemInput);
+                multiplyItemInput.add(itemInput);
             }
         }
 
-        Album album = albumController.get(groupId, albumId);
-        List<Item> itemsToCreate = toPersist.stream().map(i -> new Item(i.state, i.type, album)).collect(Collectors.toList());
+        List<String[]> itemsToCreate = multiplyItemInput.stream()
+                .map(itemInput -> new String[]{itemInput.state.toString(), itemInput.type.toString()})
+                .collect(Collectors.toList());
 
-        List<Item> items = itemController.createMultiple(itemsToCreate, groupId, albumId);
+        List<ItemOutput> result = itemController.createMultiple(itemsToCreate, groupId, albumId)
+                .stream().map(ItemOutput::new)
+                .collect(Collectors.toList());
 
-        List<ItemOutput> result = items.stream().map(ItemOutput::new).collect(Collectors.toList());
-
-        return Response
-                .status(Response.Status.CREATED)
+        return Response.status(Response.Status.CREATED)
                 .entity(result)
                 .build();
     }
@@ -75,8 +68,7 @@ public class ItemResource {
     @Consumes("application/json")
     public Response update(@PathParam("groupId") Integer groupId, @PathParam("albumId") Integer albumId, @PathParam("itemId") Integer itemId, ChangeItemInput itemInput) {
         Item item = itemController.update(groupId, albumId, itemId, itemInput.state, itemInput.type);
-        return Response
-                .status(Response.Status.OK)
+        return Response.status(Response.Status.OK)
                 .entity(new ItemOutput(item))
                 .build();
     }
