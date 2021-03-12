@@ -14,10 +14,7 @@ import org.stcharles.jakartatp.model.Album;
 import org.stcharles.jakartatp.model.Group;
 import org.stcharles.jakartatp.qualifier.Prod;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -150,7 +147,7 @@ public class FuzzyFindingImp implements FuzzyFinding {
     }
 
     /**
-     * Gets the scored map
+     * Pour chaque titre on calcule son score de match avec la query passer on retourne une map de valeur DESC
      *
      * @param map   the map
      * @param query the query
@@ -158,14 +155,19 @@ public class FuzzyFindingImp implements FuzzyFinding {
      */
     @NotNull
     private Map<Integer, Integer> getScoredMap(Map<Integer, String> map, String query) {
-        return map.entrySet()
+        Map<Integer, Integer> reverseSortedMap = new LinkedHashMap<>();
+
+        map.entrySet()
                 .stream()
                 .collect(Collectors.toMap(Map.Entry::getKey, x -> scoredMatch(query, x.getValue())))
                 .entrySet()
                 .stream()
-                .filter(x -> x.getValue() > 0)
-                .sorted(Comparator.comparingInt(Map.Entry::getValue))
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+                .filter(score -> score.getValue() > 0)
+                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+                .forEachOrdered(index -> reverseSortedMap.put(index.getKey(), index.getValue()));
 
+        return reverseSortedMap;
     }
+
+
 }

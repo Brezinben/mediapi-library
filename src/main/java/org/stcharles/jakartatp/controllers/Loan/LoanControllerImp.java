@@ -7,7 +7,6 @@ import jakarta.validation.ValidationException;
 import jakarta.ws.rs.NotFoundException;
 import org.stcharles.jakartatp.controllers.Item.ItemController;
 import org.stcharles.jakartatp.controllers.User.UserController;
-import org.stcharles.jakartatp.dao.Item.ItemDao;
 import org.stcharles.jakartatp.dao.Loan.LoanDao;
 import org.stcharles.jakartatp.model.*;
 import org.stcharles.jakartatp.qualifier.Prod;
@@ -43,9 +42,6 @@ public class LoanControllerImp implements LoanController {
     @Prod
     private LoanDao loanDao;
 
-    @Inject
-    @Prod
-    private ItemDao itemDao;
 
     // predicate to filter the duplicates by the given key extractor.
 

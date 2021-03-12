@@ -1,6 +1,7 @@
 package org.stcharles.jakartatp.dao.Loan;
 
 import org.stcharles.jakartatp.model.Loan;
+import org.stcharles.jakartatp.model.LoanState;
 import org.stcharles.jakartatp.model.User;
 
 import java.util.List;
@@ -15,7 +16,7 @@ public interface LoanDao {
 
     List<Loan> getLoans(User user);
 
-    Loan getOneLoanFromUser(User user, Integer loanId);
+    List<Loan> getAllByStatus(LoanState status);
 
     void remove(Loan loan);
 }

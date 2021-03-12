@@ -4,6 +4,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.stcharles.jakartatp.model.Loan;
+import org.stcharles.jakartatp.model.LoanState;
 import org.stcharles.jakartatp.model.User;
 import org.stcharles.jakartatp.qualifier.Prod;
 
@@ -68,17 +69,11 @@ public class LoanDaoImp implements LoanDao {
                 .getResultList();
     }
 
-
-    /**
-     * Gets the one loan from user
-     *
-     * @param user   the user
-     * @param loanId the loan identifier
-     * @return the one loan from user
-     * @Override
-     */
-    public Loan getOneLoanFromUser(User user, Integer loanId) {
-        return getLoans(user).get(loanId);
+    @Override
+    public List<Loan> getAllByStatus(LoanState status) {
+        return em.createQuery("select l from Loan l  where l.status = :status order by l.dateStart", Loan.class)
+                .setParameter("status", status)
+                .getResultList();
     }
 
 

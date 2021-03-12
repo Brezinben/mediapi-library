@@ -117,7 +117,7 @@ public class GroupControllerImp implements GroupController {
         //On pourrait faire une vérification avec un equal sur la date et le nom
         Optional<List<Group>> groups = Optional.ofNullable(getByName(name));
         if (groups.isPresent()) {
-            boolean alreadyExist = groups.get().stream().anyMatch(group -> group.getCreated_at().equals(createdAt));
+            boolean alreadyExist = groups.get().stream().anyMatch(group -> group.getCreated_at().equals(createdAt) && group.getName().equals(name));
             if (alreadyExist) {
                 throw new ValidationException("Le groupe existe déjà");
             }
