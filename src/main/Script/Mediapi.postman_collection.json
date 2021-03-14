@@ -1,0 +1,1068 @@
+{
+  "info": {
+    "_postman_id": "e1b68de4-42b0-468c-b0ab-cfdc5bd3251a",
+    "name": "Mediapi",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "GET",
+      "item": [
+        {
+          "name": "User",
+          "item": [
+            {
+              "name": "All User",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/jakartatp-1.0-SNAPSHOT/api/users/",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "jakartatp-1.0-SNAPSHOT",
+                    "api",
+                    "users",
+                    ""
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "One User",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/jakartatp-1.0-SNAPSHOT/api/users/1",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "jakartatp-1.0-SNAPSHOT",
+                    "api",
+                    "users",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "User by Email",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/jakartatp-1.0-SNAPSHOT/api/users?email=benjamin@hotmail.fr",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "jakartatp-1.0-SNAPSHOT",
+                    "api",
+                    "users"
+                  ],
+                  "query": [
+                    {
+                      "key": "email",
+                      "value": "benjamin@hotmail.fr"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Loans",
+          "item": [
+            {
+              "name": "Les loans d'un user",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/jakartatp-1.0-SNAPSHOT/api/users/1/loans",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "jakartatp-1.0-SNAPSHOT",
+                    "api",
+                    "users",
+                    "1",
+                    "loans"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Le Loan du user",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/jakartatp-1.0-SNAPSHOT/api/users/1/loans/6",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "jakartatp-1.0-SNAPSHOT",
+                    "api",
+                    "users",
+                    "1",
+                    "loans",
+                    "6"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Les Loans en retard",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/jakartatp-1.0-SNAPSHOT/api/users/1/loans?status=EN_RETARD",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "jakartatp-1.0-SNAPSHOT",
+                    "api",
+                    "users",
+                    "1",
+                    "loans"
+                  ],
+                  "query": [
+                    {
+                      "key": "status",
+                      "value": "EN_RETARD"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Les Loans en cours",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/jakartatp-1.0-SNAPSHOT/api/users/1/loans?status=EN_COURS",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "jakartatp-1.0-SNAPSHOT",
+                    "api",
+                    "users",
+                    "1",
+                    "loans"
+                  ],
+                  "query": [
+                    {
+                      "key": "status",
+                      "value": "EN_COURS"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Les Loans rendu",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/jakartatp-1.0-SNAPSHOT/api/users/1/loans?status=RENDU",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "jakartatp-1.0-SNAPSHOT",
+                    "api",
+                    "users",
+                    "1",
+                    "loans"
+                  ],
+                  "query": [
+                    {
+                      "key": "status",
+                      "value": "RENDU"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Group",
+          "item": [
+            {
+              "name": "Les groupes",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/jakartatp-1.0-SNAPSHOT/api/groups",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "jakartatp-1.0-SNAPSHOT",
+                    "api",
+                    "groups"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Un groupe",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/jakartatp-1.0-SNAPSHOT/api/groups/4",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "jakartatp-1.0-SNAPSHOT",
+                    "api",
+                    "groups",
+                    "4"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Un groupe par son nom",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/jakartatp-1.0-SNAPSHOT/api/groups/?name=test",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "jakartatp-1.0-SNAPSHOT",
+                    "api",
+                    "groups",
+                    ""
+                  ],
+                  "query": [
+                    {
+                      "key": "name",
+                      "value": "test"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Album",
+          "item": [
+            {
+              "name": "Les albums d'un groupe",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/jakartatp-1.0-SNAPSHOT/api/groups/2/albums/",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "jakartatp-1.0-SNAPSHOT",
+                    "api",
+                    "groups",
+                    "2",
+                    "albums",
+                    ""
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "L' albums avec son id d'un groupe",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/jakartatp-1.0-SNAPSHOT/api/groups/1/albums/2",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "jakartatp-1.0-SNAPSHOT",
+                    "api",
+                    "groups",
+                    "1",
+                    "albums",
+                    "2"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Les albums par titre et par groupe",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/jakartatp-1.0-SNAPSHOT/api/groups/4/albums?title=test",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "jakartatp-1.0-SNAPSHOT",
+                    "api",
+                    "groups",
+                    "4",
+                    "albums"
+                  ],
+                  "query": [
+                    {
+                      "key": "title",
+                      "value": "test"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Item",
+          "item": [
+            {
+              "name": "Les items lié à un album",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/jakartatp-1.0-SNAPSHOT/api/groups/1/albums/1/items/",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "jakartatp-1.0-SNAPSHOT",
+                    "api",
+                    "groups",
+                    "1",
+                    "albums",
+                    "1",
+                    "items",
+                    ""
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "L'item avec l'id lié à un album",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/jakartatp-1.0-SNAPSHOT/api/groups/2/albums/10/items/3",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "jakartatp-1.0-SNAPSHOT",
+                    "api",
+                    "groups",
+                    "2",
+                    "albums",
+                    "10",
+                    "items",
+                    "3"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "POST",
+      "item": [
+        {
+          "name": "User",
+          "item": [
+            {
+              "name": "TEST - Création d'un user avec un mail existant",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"email\": \"benjamin@hotmail.fr\",\r\n  \"firstName\": \"Benjamin\",\r\n  \"lastName\": \"David\"\r\n}\r\n"
+                },
+                "url": {
+                  "raw": "http://localhost:8080/jakartatp-1.0-SNAPSHOT/api/users",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "jakartatp-1.0-SNAPSHOT",
+                    "api",
+                    "users"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Création d'un user",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"email\": \"test@hotmail.fr\",\r\n  \"firstName\": \"Benjamin\",\r\n  \"lastName\": \"David\"\r\n}\r\n"
+                },
+                "url": {
+                  "raw": "http://localhost:8080/jakartatp-1.0-SNAPSHOT/api/users",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "jakartatp-1.0-SNAPSHOT",
+                    "api",
+                    "users"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Loan",
+          "item": [
+            {
+              "name": " TEST - On ne peut pas prendre des loans sont sur d'autre personne",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\r\n  {\r\n    \"itemId\": 5\r\n  },\r\n  {\r\n    \"itemId\": 5\r\n  },\r\n  {\r\n    \"itemId\": 6\r\n  }\r\n]\r\n"
+                },
+                "url": {
+                  "raw": "http://localhost:8080/jakartatp-1.0-SNAPSHOT/api/users/1/loans",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "jakartatp-1.0-SNAPSHOT",
+                    "api",
+                    "users",
+                    "1",
+                    "loans"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Création de plusieurs loans",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\r\n  {\r\n    \"itemId\": 5\r\n  },\r\n  {\r\n    \"itemId\": 5\r\n  },\r\n  {\r\n    \"itemId\": 6\r\n  }\r\n]\r\n"
+                },
+                "url": {
+                  "raw": "http://localhost:8080/jakartatp-1.0-SNAPSHOT/api/users/1/loans",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "jakartatp-1.0-SNAPSHOT",
+                    "api",
+                    "users",
+                    "1",
+                    "loans"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Crée un groupe",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"createdAt\": \"2020-02-27\",\r\n  \"name\": \"Manafest\"\r\n}\r\n\r\n"
+            },
+            "url": {
+              "raw": "http://localhost:8080/jakartatp-1.0-SNAPSHOT/api/groups/",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "jakartatp-1.0-SNAPSHOT",
+                "api",
+                "groups",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Crée un album",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"release\": \"2018-02-06\",\r\n  \"title\": \"Album de test\"\r\n}\r\n\r\n"
+            },
+            "url": {
+              "raw": "http://localhost:8080/jakartatp-1.0-SNAPSHOT/api/groups/2/albums",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "jakartatp-1.0-SNAPSHOT",
+                "api",
+                "groups",
+                "2",
+                "albums"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Items",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "[\r\n  {\r\n    \"state\": \"NEUF\",\r\n    \"type\": \"CD\",\r\n    \"nombre\": 10\r\n  },\r\n  {\r\n    \"state\": \"NEUF\",\r\n    \"type\": \"VINYLE\",\r\n    \"nombre\": 9\r\n  }\r\n]\r\n"
+            },
+            "url": {
+              "raw": "http://localhost:8080/jakartatp-1.0-SNAPSHOT/api/groups/1/albums/1/items/",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "jakartatp-1.0-SNAPSHOT",
+                "api",
+                "groups",
+                "1",
+                "albums",
+                "1",
+                "items",
+                ""
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "PUT",
+      "item": [
+        {
+          "name": "User",
+          "item": [
+            {
+              "name": "Changement d'un user",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"email\": \"benjamin@hotmail.fr\",\r\n  \"firstName\": \"Test\",\r\n  \"lastName\": \"Test\"\r\n}"
+                },
+                "url": {
+                  "raw": "http://localhost:8080/jakartatp-1.0-SNAPSHOT/api/users/1",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "jakartatp-1.0-SNAPSHOT",
+                    "api",
+                    "users",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Si le user a son email déjà pris",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"email\": \"benjamin@hotmail.fr\",\r\n  \"firstName\": \"Test\",\r\n  \"lastName\": \"Test\"\r\n}"
+                },
+                "url": {
+                  "raw": "http://localhost:8080/jakartatp-1.0-SNAPSHOT/api/users/1",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "jakartatp-1.0-SNAPSHOT",
+                    "api",
+                    "users",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Modifier un album",
+          "protocolProfileBehavior": {
+            "disabledSystemHeaders": {
+              "accept": true,
+              "content-type": true
+            }
+          },
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"title\": \"Mon Super Album Tes\",\r\n  \"release\": \"2020-02-27\"\r\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/jakartatp-1.0-SNAPSHOT/api/groups/4/albums/15",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "jakartatp-1.0-SNAPSHOT",
+                "api",
+                "groups",
+                "4",
+                "albums",
+                "15"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Changer un Group",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"createdAt\": \"2020-02-27\",\r\n  \"name\": \"Two Days Grace\"\r\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/jakartatp-1.0-SNAPSHOT/api/groups/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "jakartatp-1.0-SNAPSHOT",
+                "api",
+                "groups",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Rendre un loan",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"state\": \"RENDU\"\r\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/jakartatp-1.0-SNAPSHOT/api/users/1/loans/3",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "jakartatp-1.0-SNAPSHOT",
+                "api",
+                "users",
+                "1",
+                "loans",
+                "3"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Modifier d'un item",
+          "protocolProfileBehavior": {
+            "disabledSystemHeaders": {
+              "accept": true,
+              "content-type": true
+            }
+          },
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"state\": \"NEUF\",\r\n  \"type\": \"VINYLE\"\r\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/jakartatp-1.0-SNAPSHOT/api/groups/1/albums/1/items/2",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "jakartatp-1.0-SNAPSHOT",
+                "api",
+                "groups",
+                "1",
+                "albums",
+                "1",
+                "items",
+                "2"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "DELETE",
+      "item": [
+        {
+          "name": "Supprimer un user",
+          "protocolProfileBehavior": {
+            "disabledSystemHeaders": {
+              "accept": true,
+              "content-type": true
+            }
+          },
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://localhost:8080/jakartatp-1.0-SNAPSHOT/api/users/2",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "jakartatp-1.0-SNAPSHOT",
+                "api",
+                "users",
+                "2"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Supprimer un group",
+          "protocolProfileBehavior": {
+            "disabledSystemHeaders": {
+              "accept": true,
+              "content-type": true
+            }
+          },
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://localhost:8080/jakartatp-1.0-SNAPSHOT/api/groups/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "jakartatp-1.0-SNAPSHOT",
+                "api",
+                "groups",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Supression d'un album",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/jakartatp-1.0-SNAPSHOT/api/groups/2/albums/7",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "jakartatp-1.0-SNAPSHOT",
+                "api",
+                "groups",
+                "2",
+                "albums",
+                "7"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "On ne peut supprimer un loan",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": null
+          },
+          "response": []
+        },
+        {
+          "name": "Supression d'un item",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/jakartatp-1.0-SNAPSHOT/api/groups/1/albums/3",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "jakartatp-1.0-SNAPSHOT",
+                "api",
+                "groups",
+                "1",
+                "albums",
+                "3"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
