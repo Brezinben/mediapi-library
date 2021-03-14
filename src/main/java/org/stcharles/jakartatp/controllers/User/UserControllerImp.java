@@ -99,10 +99,12 @@ public class UserControllerImp implements UserController {
         User user = Optional.ofNullable(userDao.get(id)).orElseThrow(NotFoundException::new);
         user.setFirstName(firstName);
         user.setLastName(lastName);
+
         Optional<User> emailExist = Optional.ofNullable(userDao.getByEmail(email));
-        if (emailExist.isPresent()) {
+        if (emailExist.isPresent() && !emailExist.get().getEmail().equals(user.getEmail())) {
             throw new ValidationException("L'email ne peut pas être enregistrer car il existe déjà dans notre base");
         }
+
         user.setEmail(email);
         return user;
     }
