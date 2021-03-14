@@ -1,4 +1,4 @@
-Voici la doc de l'api, toutes les requête ci- dessous sont préfixer par : http://localhost:8080/jakartatp-1.0-SNAPSHOT/
+Voici la doc de l'API, toute les requêtes ci- dessous sont préfixer par : http://localhost:8080/jakartatp-1.0-SNAPSHOT/
 
 Dès fois j'ai préféré utiliser les streams au lieux d'une requête en base pour m'exercer. Car je ne savais pas vraiment
 ce qui était le plus optimizé.
@@ -24,10 +24,10 @@ Tout les loans du user 1 :
 Un seul :
 ``api/users/1/loans/0``
 
-Par status:
+Par status :
 ``api/users/1/loans?status=EN_RETARD``
 
-Valeur posible ( *les valeurs de LoanState.java* ) :
+Valeur possible ( *les valeurs de LoanState.java* ) :
 
 - EN_COURS
 - RENDU
@@ -90,7 +90,7 @@ Sur ``/api/users/:id/loans``
 ]
 ````
 
-On peut aller jusqu'a 5 enregistrement :
+On peut aller jusqu'a 5 enregistrements :
 
 ````json
 [
@@ -159,7 +159,7 @@ Sur ``/api/groups/:id/albums/:id/items/``
 
 Viendra créer 9 items-VINYLE et 10 item-CD sur l'album.
 
-Valeur posible pour le state ( *les valeurs d’ItemState.java* ) :
+Valeur possible pour le state ( *les valeurs d’ItemState.java* ) :
 
 - NEUF
 - CONVENABLE
