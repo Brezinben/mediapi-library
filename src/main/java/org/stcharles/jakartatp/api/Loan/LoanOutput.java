@@ -10,7 +10,8 @@ import java.time.LocalDate;
 public class LoanOutput {
     public LocalDate dateStart;
     public LocalDate dateEnd;
-    public Integer itemId;
+    public Integer item;
+    public Integer user;
     public LoanState status;
     public Integer id;
 
@@ -20,8 +21,9 @@ public class LoanOutput {
     public LoanOutput(Loan loan) {
         this.dateStart = loan.getDateStart();
         this.dateEnd = loan.getDateEnd();
-        this.itemId = loan.getItem().getId();
+        this.item = loan.getItem().getId();
         this.status = loan.getStatus();
         this.id = loan.getId();
+        this.user = loan.getUser().getId();
     }
 }

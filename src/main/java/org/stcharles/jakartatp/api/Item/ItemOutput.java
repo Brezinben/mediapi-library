@@ -6,6 +6,7 @@ import org.stcharles.jakartatp.model.ItemState;
 import org.stcharles.jakartatp.model.ItemType;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 @Serialization(encoding = "json")
 public class ItemOutput {
@@ -13,6 +14,8 @@ public class ItemOutput {
     public ItemType type;
     public LocalDate cratedAt;
     public Integer id;
+    public Integer album;
+    public Integer loan;
 
     /**
      * @param i
@@ -22,6 +25,8 @@ public class ItemOutput {
         this.type = i.getType();
         this.cratedAt = i.getCratedAt();
         this.id = i.getId();
+        this.album = i.getAlbum().getId();
+        this.loan = Optional.ofNullable(i.getLoan()).isPresent() ? i.getLoan().getId() : 0;
     }
 
 }
